@@ -17,7 +17,6 @@
 <body class="font-sans antialiased">
 <div class="min-h-screen bg-blue-50">
     {{-- Tu peux faire un menu spécial utilisateur ici --}}
-    @include('layouts.user-nav')
 
     @isset($header)
     <header class="bg-white shadow">
@@ -26,6 +25,10 @@
         </div>
     </header>
     @endisset
+
+<!--    Include The nav bar-->
+    @include('layouts.user-nav')
+
 
     <main>
         {{ $slot }}

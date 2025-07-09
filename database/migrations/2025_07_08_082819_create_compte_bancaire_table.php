@@ -11,7 +11,6 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('compte_bancaire', function (Blueprint $table) {
             Schema::create('compte_bancaire', function (Blueprint $table) {
                 $table->id();
                 $table->string('numero_compte', 11)->unique();
@@ -28,7 +27,6 @@ return new class extends Migration
             });
 
 
-        });
     }
 
     /**

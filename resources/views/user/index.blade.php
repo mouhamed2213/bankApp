@@ -1,12 +1,13 @@
 <?php
 
-$userid = '';
-if(Auth::user()->comptes){
-    $userId = Auth::user()->id;
+use Illuminate\Http\Request;
 
-        echo "true";
+$account_state = session()->get("session_account_state") !== null;
+if( $account_state ){
+//    session()->put("session_account_state", true);
+        echo "pas en encore validae";
     }else{
-        echo "fla";
+        echo "validae";
     }
 ?>
 
@@ -22,7 +23,6 @@ if(Auth::user()->comptes){
 
 
     @if(Auth::user()->comptes->isEmpty())
-
         <div class="min-h-screen flex justify-center items-center bg-green-50">
             <form method="POST" action="{{ route('create_account.store') }}">
                 @csrf
@@ -39,6 +39,13 @@ if(Auth::user()->comptes){
             </form>
         </div>
     @endif
+
+    @unless(!session('session_account_state') && !Auth::user()->comptes->isEmpty())
+        <p> Votre demande d'ouverture de compte est en coure de tratement  </p>
+    @else
+        <p> Votre demande d'ouverture de compte a etait valider   </p>
+    @endunless
+
 
 
 

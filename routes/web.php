@@ -10,13 +10,28 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-//admin route
-Route::get('/admin-dash', [AdminController::class,'index'])->middleware(['auth', 'verified'])->name('dashboard');
+////admin route
+//-Route::get('/admin-dash', [AdminController::class,'index'])>middleware(['auth', 'verified'])->name('dashboard');
+//
+
+// Admin ROUTE
+Route::middleware(['auth','verified'])->group(function(){
+
+   // Grouped Route
+    Route::prefix('admin')->name('admin.')->group(function(){
+        Route::get('/', [AdminController::class,'index'])->name('dashboard');
+    });
+
+
+    //Request Route
+    Route::prefix('requests')->name('request.')->group(function(){
+        Route::get('/', [AdminController::class,'requestsPending'])->name('requestsPending');
+    });
+});
+
 
 
 //user routes
-//Route::get('/home', [UserController::class,'index'])->middleware(['auth', 'verified'])->name('user');
-
 Route::middleware(['auth', 'verified'])->group(function () { // middlewar
 
     Route::prefix('user')->name('user.')->group(function () { // prefix

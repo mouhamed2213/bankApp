@@ -32,7 +32,7 @@ class AuthenticatedSessionController extends Controller
         if($user-> role == "client"){
             return redirect()->route('user.index');
         }else if($user->role == "admin"){
-            return redirect()->route('dashboard');
+            return redirect()->route('admin.dashboard');
         }else{
             abort(404, 'Page not found');
         }
