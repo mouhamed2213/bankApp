@@ -8,7 +8,7 @@
                 Accueil
             </a>
 
-            <a href="#"
+            <a href="{{  route('requests.requestsPending')  }}"
                class="inline-block px-4 py-2 bg-green-100 text-green-700 text-sm font-medium rounded-md hover:bg-green-200 transition">
                 Demandes
             </a>

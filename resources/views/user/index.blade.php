@@ -1,17 +1,3 @@
-<?php
-
-use Illuminate\Http\Request;
-
-$account_state = session()->get("session_account_state") !== null;
-if( $account_state ){
-//    session()->put("session_account_state", true);
-        echo "pas en encore validae";
-    }else{
-        echo "validae";
-    }
-?>
-
-
 <x-user-layout>
     <x-slot name="header">
         <div class="flex justify-between items-center">
@@ -40,13 +26,12 @@ if( $account_state ){
         </div>
     @endif
 
-    @unless(!session('session_account_state') && !Auth::user()->comptes->isEmpty())
-        <p> Votre demande d'ouverture de compte est en coure de tratement  </p>
-    @else
+    @unless(session('!session_account_state') )
+<!--       -->
         <p> Votre demande d'ouverture de compte a etait valider   </p>
+    @else
+        <p> Votre demande d'ouverture de compte est en coure de tratement  </p>
     @endunless
-
-
 
 
 

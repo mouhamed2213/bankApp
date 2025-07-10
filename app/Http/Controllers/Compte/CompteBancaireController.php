@@ -29,12 +29,13 @@ class CompteBancaireController extends Controller
         $compte_bancaire->status = 'en attente' ;
         $compte_bancaire->user_id = $id_user;
 //        $compte_bancaire->save();
-
         $this->setSessionAccountState($request, $compte_bancaire->status );
 
+        return view('user.index', compact('compte_bancaire'));
     }
 
     public function setSessionAccountState (Request $request, string $state) {
+        dd($state);
         if($state !== "actif"){
             $request->session()->put('session_account_state', true);   // use this this cession to dispay a wiatng message
             return redirect()->route('user.index');

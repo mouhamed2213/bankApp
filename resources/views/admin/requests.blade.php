@@ -114,7 +114,7 @@
 <!--                ACTIONS -->
                 <td class="px-6 py-4">
                     <!-- Modal toggle -->
-                    <a href=" {{ route()  }} " type="button" data-modal-target="editUserModal" data-modal-show="editUserModal" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Details</a>
+                    <a href=" {{ route('requests.detail', ['id' => $userRequester->id ])  }} " type="button" data-modal-target="editUserModal" data-modal-show="editUserModal" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Details</a>
                     <a href="#" type="button" data-modal-target="editUserModal" data-modal-show="editUserModal" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Valider</a>
                 </td>
 

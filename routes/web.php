@@ -24,8 +24,14 @@ Route::middleware(['auth','verified'])->group(function(){
 
 
     //Request Route
-    Route::prefix('requests')->name('request.')->group(function(){
+    Route::prefix('requests')->name('requests.')->group(function(){
         Route::get('/', [AdminController::class,'requestsPending'])->name('requestsPending');
+
+        // Get the deatil on account
+        Route::get('detail/{id}', [AdminController::class,'show'])->name('detail');
+
+        // Route for account accepted
+        Route::post('validated/{id}', [AdminController::class,'validated'])->name('validated');
     });
 });
 
@@ -38,7 +44,6 @@ Route::middleware(['auth', 'verified'])->group(function () { // middlewar
         Route::get('/', [UserController::class, 'index'])->name('index');
 
     });
-
 
     // create account route
     Route::prefix('create_account')->name('create_account.')->group(function () {
