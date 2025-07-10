@@ -8,6 +8,7 @@
     </x-slot>
 
 
+    <!-- Check if the user has account -->
     @if(Auth::user()->comptes->isEmpty())
         <div class="min-h-screen flex justify-center items-center bg-green-50">
             <form method="POST" action="{{ route('create_account.store') }}">
@@ -26,13 +27,11 @@
         </div>
     @endif
 
-    @unless(session('!session_account_state') )
-<!--       -->
-        <p> Votre demande d'ouverture de compte a etait valider   </p>
-    @else
-        <p> Votre demande d'ouverture de compte est en coure de tratement  </p>
-    @endunless
-
-
+   <!--  check if the user's account exist but on pending -->
+    @if(session('statut'))
+        <div class="min-h-screen flex justify-center items-center bg-green-50">
+            <p> Votre demand d'ouverture de compte est en cour de traitement </p>
+        </div>
+    @endif
 
 </x-user-layout>

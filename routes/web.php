@@ -17,13 +17,13 @@ Route::get('/', function () {
 // Admin ROUTE
 Route::middleware(['auth','verified'])->group(function(){
 
-   // Grouped Route
+                                    // Grouped Route
     Route::prefix('admin')->name('admin.')->group(function(){
         Route::get('/', [AdminController::class,'index'])->name('dashboard');
     });
 
 
-    //Request Route
+                                     //Request Route
     Route::prefix('requests')->name('requests.')->group(function(){
         Route::get('/', [AdminController::class,'requestsPending'])->name('requestsPending');
 
@@ -37,7 +37,7 @@ Route::middleware(['auth','verified'])->group(function(){
 
 
 
-//user routes
+                                    //user routes
 Route::middleware(['auth', 'verified'])->group(function () { // middlewar
 
     Route::prefix('user')->name('user.')->group(function () { // prefix
@@ -45,12 +45,13 @@ Route::middleware(['auth', 'verified'])->group(function () { // middlewar
 
     });
 
-    // create account route
+                                    // create account route
     Route::prefix('create_account')->name('create_account.')->group(function () {
         Route::post('/', [CompteBancaireController::class, 'store'])->name('store');
     });
 
 });
+
 
 
 

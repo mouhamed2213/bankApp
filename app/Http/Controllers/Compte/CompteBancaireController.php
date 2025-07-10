@@ -20,25 +20,18 @@ class CompteBancaireController extends Controller
 
         // store data
         $compte_bancaire = new CompteBancaire();
-        $compte_bancaire->numero_compte = str_pad( mt_rand(1,15), 11, '0', STR_PAD_LEFT );
-        $compte_bancaire->code_banque = str_pad( mt_rand(1,10000), 5, '0', STR_PAD_LEFT );
-        $compte_bancaire->code_guichet = str_pad( mt_rand(1,10000), 5,  "0", STR_PAD_LEFT );
+        $compte_bancaire->numero_compte = str_pad( mt_rand(1,15), 11, '1', STR_PAD_LEFT );
+        $compte_bancaire->code_banque = str_pad( mt_rand(1,10000), 5, '2', STR_PAD_LEFT );
+        $compte_bancaire->code_guichet = str_pad( mt_rand(1,10000), 5,  "4", STR_PAD_LEFT );
         $compte_bancaire->RIB = str_pad(mt_rand(1,10), 2, "0", STR_PAD_LEFT);
         $compte_bancaire->solde  =  00.0;
         $compte_bancaire->type_de_compte = 'courant';
         $compte_bancaire->status = 'en attente' ;
         $compte_bancaire->user_id = $id_user;
 //        $compte_bancaire->save();
-        $this->setSessionAccountState($request, $compte_bancaire->status );
 
-        return view('user.index', compact('compte_bancaire'));
-    }
+        return view('user.index');
 
-    public function setSessionAccountState (Request $request, string $state) {
-        dd($state);
-        if($state !== "actif"){
-            $request->session()->put('session_account_state', true);   // use this this cession to dispay a wiatng message
-            return redirect()->route('user.index');
-        }
     }
 }
+
