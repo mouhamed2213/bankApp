@@ -33,13 +33,22 @@ class AdminController extends Controller
 
     // the user account is accepted
     public function validated($id){
-        $userRequestInfo = CompteBancaire::with('user')->where('id', $id)->findOrFail($id);
 
         // update the state of the account state
             $update = CompteBancaire::findOrFail($id);
             $update -> status ="active";
 //            $update -> save();
-            return redirect()->route('requests.requestsPending');
+            return redirect()->route('requests.requestsPending')->with('user account active with success');
+    }
+
+    // rejected account
+    public function rejected($id){
+
+        // update the state of the account state
+            $update = CompteBancaire::findOrFail($id);
+            $update -> status ="rejected";
+            $update -> save();
+            return redirect()->route('requests.requestsPending')->with('deleted successed');
     }
 
 

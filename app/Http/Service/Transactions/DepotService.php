@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\Service\Transactions;
+namespace App\Http\Service\Transactions;
 
-class depot
+class DepotService
 {
 
 }

@@ -20,7 +20,7 @@ class CompteBancaireController extends Controller
 
         // store data
         $compte_bancaire = new CompteBancaire();
-        $compte_bancaire->numero_compte = str_pad( mt_rand(1,15), 11, '1', STR_PAD_LEFT );
+        $compte_bancaire->numero_compte = str_pad( mt_rand(1,15), 11, '5', STR_PAD_LEFT );
         $compte_bancaire->code_banque = str_pad( mt_rand(1,10000), 5, '2', STR_PAD_LEFT );
         $compte_bancaire->code_guichet = str_pad( mt_rand(1,10000), 5,  "4", STR_PAD_LEFT );
         $compte_bancaire->RIB = str_pad(mt_rand(1,10), 2, "0", STR_PAD_LEFT);
@@ -30,7 +30,9 @@ class CompteBancaireController extends Controller
         $compte_bancaire->user_id = $id_user;
 //        $compte_bancaire->save();
 
-        return view('user.index');
+//        return view('user.index');
+        return redirect()->route('user.index')->with('success', 'Compte créé avec succès!');
+
 
     }
 }

@@ -25,7 +25,6 @@
          <p>Solde : {{ $userRequestInfo->solde }}</p>
      </div>
 
-     <div class="form"></div>
      <!-- Formulaire pour valider -->
      <form method="POST" action=" {{ route( 'requests.validated', ['id' => $userRequestInfo->id]) }} ">
          @csrf
@@ -33,11 +32,11 @@
 
      </form>
 
-     <!-- Formulaire pour rejeter -->
-<!--     <form method="POST" action="#">-->
-<!--         @csrf-->
-<!--         <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded">Rejeter</button>-->
-<!--     </form>-->
+      Formulaire pour rejeter
+     <form method="POST" action=" {{ route( 'requests.rejected' , ['id' => $userRequestInfo->id]) }} ">
+         @csrf
+         <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded">Rejeter</button>
+     </form>
 
 
 
