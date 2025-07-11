@@ -12,7 +12,7 @@
 
     <div class="max-w-2xl mx-auto py-10">
         <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-            <h3 class="text-lg font-semibold mb-4 text-gray-700">Effectuer un depot</h3>
+            <h3 class="text-lg font-semibold mb-4 text-gray-700">Effectuer un Retrait</h3>
 
             <form method="PPOST" action=" {{ route('transaction.deposit') }} ">
                 @csrf
@@ -22,14 +22,22 @@
                     <label for="amount" class="block text-gray-700 text-sm font-bold mb-2">
                         Montant a deposer
                     </label>
-                    <input type="number" name="amount" id="amount" min="100" required
+                    <input type="number" name="amount" id="amount" required
                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                 </div>
+
+<!--                Error -->
+                @if(session('depotRejected'))
+                <div class="alert alert-danger">
+                   <p class=" text-red-600 ">  {{ session('depotRejected') }} </p>
+                </div>
+                @endif
+
 
                 <!-- Bouton de soumission -->
                 <div class="flex items-center justify-end">
                     <button type="submit"
-                            class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                            class="bg-green-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                         Déposer
                     </button>
                 </div>

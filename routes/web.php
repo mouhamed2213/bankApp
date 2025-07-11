@@ -41,9 +41,11 @@ Route::middleware(['auth','verified'])->group(function(){
 
         // view form for deposite
         Route::get('/', [TransactionController::class,'index'])->name('index');
-
-        //
         Route::get('deposit', [TransactionController::class,'storDeposit'])->name('deposit');
+
+        // handle withdraw
+        Route::get('withdraw', [TransactionController::class,'withdraw'])->name('withdraw');
+        Route::post('storeWithdraw', [TransactionController::class, 'storeWithdraw'])->name('storeWithdraw');
     });
 
 });
@@ -54,12 +56,10 @@ Route::middleware(['auth', 'verified'])->group(function () { // middlewar
     // index convention  better to dispplay
     Route::prefix('user')->name('user.')->group(function () { // prefix
         Route::get('/', [UserController::class, 'index'])->name('index');
-
     });
 
                                     // create account route
     Route::prefix('create_account')->name('create_account.')->group(function () {
-
         // store convention  better for new creation
         Route::post('/', [CompteBancaireController::class, 'store'])->name('store');
     });
