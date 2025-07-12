@@ -40,7 +40,7 @@
     <div class="max-w-7xl mx-auto py-10 px-5 rounded-3xl my-20 lg:rounded-2xl">
         <div class="bg-white-100 text-black p-6 rounded-lg shadow text-center lg:-translate-x-0">
             <h3 class="font-bold text-lg">
-                SOLDE : <span class="text-black font-extrabold "> {{ $balancer }} FCFA</span>
+                SOLDE : <span class="text-black font-extrabold "> {{ $solde }} FCFA</span>
             </h3>
             <p class="text-sm">Solde actuel de votre compte</p>
         </div>
@@ -52,7 +52,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                 <!-- Retrait -->
 
-                <a href="{{ route ( 'transaction.withdraw' ) }} ">
+                <a href="{{ route ( 'transaction.withdraw' ) }} "> <!-- VERIFER SI IL -->
 
                     <div class="bg-red-100 text-red-800 p-6 rounded-lg shadow hover:bg-red-200 cursor-pointer">
                         <h3 class="font-bold text-lg">Retrait</h3>
@@ -124,5 +124,13 @@
             </p>
         </div>
     @endif
+
+    @if(session('withdrawPassed') || session('depotPassed') )
+        <div class="alert alert-success">
+            {{ session('withdrawPassed') }}
+            {{ session('depotPassed') }}
+        </div>
+    @endif
+
 
 </x-user-layout>

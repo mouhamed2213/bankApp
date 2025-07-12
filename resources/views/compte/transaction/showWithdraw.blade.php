@@ -36,14 +36,22 @@
                     <label for="amount" class="block text-gray-700 text-sm font-bold mb-2">
                         Montant a retirer
                     </label>
-                    <input type="number" name="amount" id="amount" required
+                    <input type="number" name="withdraw" id="withdraw" required
                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                 </div>
 
                 <!--                Error -->
-                @if(session('depotRejected'))
+                @if(session('erroreAmount') )
                 <div class="alert alert-danger">
-                    <p class=" text-red-600 ">  {{ session('erroreAmount') }} </p>
+                    <p class=" text-red-600 ">
+                        {{ session('erroreAmount') }}
+                    </p>
+                </div>
+                @endif
+
+                @if(session('balanceNotEnought'))
+                <div class="alert alert-danger">
+                    <p class=" text-red-600 ">  {{ session('balanceNotEnought') }} </p>
                 </div>
                 @endif
 

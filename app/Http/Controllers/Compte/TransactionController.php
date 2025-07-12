@@ -12,32 +12,37 @@ use Illuminate\Support\Facades\Auth;
 class TransactionController extends Controller
 {
 
-
     public function index(){
         return view('compte.transaction.showDeposite');
     }
 //
     public function storDeposit(Request $request){
-        $amount = $request->input('amount');
-        $type = "depot";
         $userId = Auth::user()->id ;
+
+        $type = "depot";
+        $amount = $request->input('amount');
+        $this->newBalance = $amount;
+
+        // conditions
         $maxAmount = 2000000;
-        $minAmount = 1000;
+        $minAmount = 100;
 
         // get the firs caaount to the user
-        $compteId = Auth::user()->with('comptes')->find($userId)->comptes[0]->id;
+        $compteId = Auth::user()->with('comptes')->find($this->getUserId())->comptes[0]->id;
+        $sold  = Transaction::where('compte_source_id',$compteId)->sum('montant');
 
-        // store trasaction
-        $transaction = new Transaction();
-        $transaction -> type_transaction  = $type;
-        $transaction -> montant = $amount;
-        $transaction -> compte_source_id = $compteId;
 
-        if(  $amount > $maxAmount || $amount < $minAmount){
+
+        if($amount > $maxAmount || $amount < $minAmount){
             return back()->with("depotRejected", "Montant Maximum Depot : ".$maxAmount."\n Montant Minimum Depot : ".$minAmount);
 
         }else {
-
+            // store trasaction
+            $transaction = new Transaction();
+            $transaction -> type_transaction  = $type;
+            $transaction -> montant =  $amount ;
+            $transaction -> solde = $amount + $sold ;
+            $transaction -> compte_source_id = $this->getAccountId();
             $transaction -> save(); // save if true
             return redirect()->route('user.index')->with("depotPassed", "Transfere reusissi");
         }
@@ -46,30 +51,52 @@ class TransactionController extends Controller
 
     // handle withdraw
     public function withdraw(){
-        $compteId = Auth::user()->comptes->first()->id;
-        $balancer = Transaction::where('compte_source_id',$compteId)->sum('montant');
-
+        $this->compteId = Auth::user()->comptes->first()->id;
+//        $balancer = Transaction::where('compte_source_id',$this->compteId)->sum('montant');
         return view('compte.transaction.showWithdraw');
     }
 
-    // handle with draw
+    // handle withdraw
     public function storeWithdraw(Request $request){
-            $request->validate([]);
 
-            $ammount = $request->input('amount');
+        $amountWithdraw = $request->input('withdraw'); // amount to retrieve
+        $type = 'withdraw';
+        $accountId = $this->getAccountId();
+        $currentSolde = Transaction::where('compte_source_id',$accountId)
+            ->orderBy('id','desc')
+            ->value('solde');
 
-            dd($ammount);
+        // check the min allowed to retrieve
+        if( $amountWithdraw < 1000 ){
+            return back() -> with('erroreAmount', 'Minimum montant autriser : 5000');
+        }
 
-            $type = "withdraw";
-            $minWithdraw = 10000;
-            $maxWithdraw = 3000000;
-            $message =  "Maximu retrait ".$ammount."\n Minimum retrait ".$minWithdraw;
+        // check if the balance is enough
+        if( $amountWithdraw > $currentSolde ){
+            return back() -> with('balanceNotEnought', 'Solde inssufisant');
+        }
 
-            if( $ammount  > $maxWithdraw || $ammount < $minWithdraw){
-                return back()->with('erroreAmount' , $message);
-            }else{
-                return back()->with('erroreAmount' , $message);
-            }
 
+        // Perfomr Transaction
+        $newSole = $currentSolde - $amountWithdraw;
+        $transaction = new Transaction();
+        $transaction -> type_transaction = $type;
+        $transaction -> montant = $amountWithdraw;
+        $transaction -> solde = $newSole;
+        $transaction -> compte_source_id = $this -> getAccountId();
+        $transaction -> save();
+
+        return redirect()->route('user.index')->with("withdrawPassed", "Transfere reusissi");
+    }
+
+
+
+    public function getAccountId(){
+        $userId = Auth::user()->id;
+        return Auth::user()->with('comptes')->find($userId)->comptes[0]->id;
+    }
+
+    public function getUserId(){
+        return Auth::user()->id;
     }
 }
