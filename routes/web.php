@@ -46,6 +46,13 @@ Route::middleware(['auth','verified'])->group(function(){
         // handle withdraw
         Route::get('withdraw', [TransactionController::class,'withdraw'])->name('withdraw');
         Route::post('storeWithdraw', [TransactionController::class, 'storeWithdraw'])->name('storeWithdraw');
+
+
+//                                        BEST ROUTING NAMING EXAMPLE
+                                        // Cretea is almost user to  display new create ressource
+        Route::get('transfer', [TransactionController::class,'transferCreate'])->name('transfer.create');
+                                        // Store handle  the creation
+        Route::get('transfer/store', [TransactionController::class,'transferStor'])->name('transfer.store');
     });
 
 });

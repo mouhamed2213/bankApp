@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Compte;
 
 use App\Http\Controllers\Controller;
+use App\Service\TransfereService;
 use App\Models\compte\Transaction;
 use Illuminate\Http\Request;
 
@@ -11,10 +12,36 @@ use Illuminate\Support\Facades\Auth;
 
 class TransactionController extends Controller
 {
+    /*  TO STARE
+        Whene the user make transfer we shoulf check if the balansce is enougn t=o perm that transfere
+            if note we should send a messagge
+
+            with "  dd(session('balanceNotEnought'));"  he's debug method is displayed
+            but  the page is reditec even with the controle in $this->> controller
+
+     *
+     *
+     * */
 
     public function index(){
         return view('compte.transaction.showDeposite');
     }
+
+    // displaye the transfere view form
+    public function transferCreate(Request $request){
+        return view('compte.transaction.create_transfere');
+    }
+
+    // handle transfere
+    public function transferStor(Request $request,  TransfereService $transaction){
+        if(session('balanceNotEnought') !== null){
+            return back()->with('balanceNotEnought', 'Sole inssufisant pour effecter se transfere');
+        }
+
+        $transaction->store($request);
+    }
+
+
 //
     public function storDeposit(Request $request){
         $userId = Auth::user()->id ;

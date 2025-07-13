@@ -71,11 +71,15 @@
 
                 </a>
 
-                <!-- Dépôt -->
-                <div class="bg-blue-100 text-blue-800 p-6 rounded-lg shadow hover:bg-blue-200 cursor-pointer">
-                    <h3 class="font-bold text-lg">Virement</h3>
-                    <p class="text-sm">Envoyer de l'argent à un autre compte</p>
-                </div>
+                <a href="{{ route('transaction.transfer.create' ) }}">
+
+                    <!-- Dépôt -->
+                    <div class="bg-blue-100 text-blue-800 p-6 rounded-lg shadow hover:bg-blue-200 cursor-pointer">
+                        <h3 class="font-bold text-lg">Virement</h3>
+                        <p class="text-sm">Envoyer de l'argent à un autre compte</p>
+                    </div>
+
+                </a>
 
                 <!-- Paiement en ligne -->
                 <div class="bg-yellow-100 text-yellow-800 p-6 rounded-lg shadow hover:bg-yellow-200 cursor-pointer">
