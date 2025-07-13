@@ -10,6 +10,10 @@ use Illuminate\Http\Request;
 
 class CompteBancaireController extends Controller
 {
+    public function index(){
+        return view('compte.index');
+    }
+
 
     // store bank information
     public function store (Request $request) {
@@ -35,5 +39,12 @@ class CompteBancaireController extends Controller
 
 
     }
+
+    function calculerRIB($codeBanque, $codeGuichet, $numeroCompte) {
+        $rib = $codeBanque . $codeGuichet . $numeroCompte;
+        $cle = 97 - ($rib % 97); // Clé de contrôle très simplifiée
+        return str_pad($cle, 2, '0', STR_PAD_LEFT); // Ajoute 0 devant si nécessaire
+    }
+
 }
 

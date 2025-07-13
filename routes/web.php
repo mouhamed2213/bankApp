@@ -55,6 +55,12 @@ Route::middleware(['auth','verified'])->group(function(){
         Route::get('transfer/store', [TransactionController::class,'transferStor'])->name('transfer.store');
     });
 
+
+                                    // A HANDLE ACCOUNT ROUTES
+        Route::prefix('compte')->name('compte.')->group(function() {
+            Route::get('/' , [ CompteBancaireController::class, 'index'] )->name('index');
+        });
+
 });
 
                                     //user routes

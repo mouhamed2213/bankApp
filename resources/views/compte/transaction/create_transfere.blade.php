@@ -25,8 +25,20 @@
                     <label for="destinataire" class="block text-gray-700 text-sm font-bold mb-2">
                         Numéro de compte destinataire
                     </label>
-                    <input type="text" name="recipient" id="destinataire" required
-                           class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                    <input type="text" name="recipient" id="destinataire"
+                           class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            inputmode = "numeric" autocomplete="off"
+                            maxlength = "11"
+                            pattern = "\d{11}"
+                    >
+                    <!-- errors -->
+                    @if(session('accountNotExist'))
+                    <div class="mb-4 ">
+                        <p  class="text-red-500" > {{ session('accountNotExist') }}</p>
+                    </div>
+                    @endif
+
+
                 </div>
 
                 <!-- Montant -->
@@ -38,16 +50,20 @@
                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
 
                     <!-- errors -->
-
+                    @if(session('balanceNotEnought'))
+                        <div class="mb-4 ">
+                            <p  class="text-red-500" > {{session('balanceNotEnought')}} </p>
+                        </div>
+                    @endif
                 </div>
 
                 <!-- Description (facultatif) -->
                 <div class="mb-4">
                     <label for="description" class="block text-gray-700 text-sm font-bold mb-2">
-                        Motif du virement (facultatif)
+                        Numero de compte
                     </label>
-                    <textarea name="description" id="description" rows="3"
-                              class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"></textarea>
+                    <input name="accountNumber" id="description" rows="3" disabled
+                              class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"></input>
                 </div>
 
                 <!-- Bouton de soumission -->

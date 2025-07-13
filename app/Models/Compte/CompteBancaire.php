@@ -13,13 +13,15 @@ class CompteBancaire extends Model
 {
 
     protected $table = 'compte_bancaire'; // laravel should use exactly this table name
+    protected $fillable = [
+        "solde"
+        ];
 
     public function user(): BelongsTo{
         // declare the type of relation between account and the use
         // meaning the this account blogs to user
         return $this->belongsTo(User::class);
     }
-
 
     // account has many source  transaction
     public function transactionSource():HasMany{

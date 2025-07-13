@@ -40,7 +40,7 @@
     <div class="max-w-7xl mx-auto py-10 px-5 rounded-3xl my-20 lg:rounded-2xl">
         <div class="bg-white-100 text-black p-6 rounded-lg shadow text-center lg:-translate-x-0">
             <h3 class="font-bold text-lg">
-                SOLDE : <span class="text-black font-extrabold "> {{ $solde }} FCFA</span>
+                SOLDE : <span class="text-black font-extrabold ">  FCFA</span>
             </h3>
             <p class="text-sm">Solde actuel de votre compte</p>
         </div>

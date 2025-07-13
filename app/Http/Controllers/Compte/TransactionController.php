@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Compte;
 
 use App\Http\Controllers\Controller;
+use App\Models\Compte\CompteBancaire;
 use App\Service\TransfereService;
 use App\Models\compte\Transaction;
 use Illuminate\Http\Request;
@@ -12,16 +13,6 @@ use Illuminate\Support\Facades\Auth;
 
 class TransactionController extends Controller
 {
-    /*  TO STARE
-        Whene the user make transfer we shoulf check if the balansce is enougn t=o perm that transfere
-            if note we should send a messagge
-
-            with "  dd(session('balanceNotEnought'));"  he's debug method is displayed
-            but  the page is reditec even with the controle in $this->> controller
-
-     *
-     *
-     * */
 
     public function index(){
         return view('compte.transaction.showDeposite');
@@ -34,17 +25,27 @@ class TransactionController extends Controller
 
     // handle transfere
     public function transferStor(Request $request,  TransfereService $transaction){
+        $transaction->store($request);
+        $valide = false;
         if(session('balanceNotEnought') !== null){
-            return back()->with('balanceNotEnought', 'Sole inssufisant pour effecter se transfere');
+            return back();
         }
 
-        $transaction->store($request);
+        if(session('accountNotExist') !== null){
+            return back();
+        }
+
+
+        // performa the transfere
+
+        $transaction ->  transferToRecipient($request);
+        return view('user.index');
     }
 
 
 //
     public function storDeposit(Request $request){
-        $userId = Auth::user()->id ;
+
 
         $type = "depot";
         $amount = $request->input('amount');
@@ -66,10 +67,18 @@ class TransactionController extends Controller
         }else {
             // store trasaction
             $transaction = new Transaction();
+
             $transaction -> type_transaction  = $type;
             $transaction -> montant =  $amount ;
-            $transaction -> solde = $amount + $sold ;
-            $transaction -> compte_source_id = $this->getAccountId();
+
+            $compte = $this->getAccount(); // balance
+
+            if ($compte) {
+                $compte->solde = $amount + $sold;
+                $compte->save();
+            }
+
+            $transaction -> compte_source_id = $this->getAccount()->value('id');
             $transaction -> save(); // save if true
             return redirect()->route('user.index')->with("depotPassed", "Transfere reusissi");
         }
@@ -85,13 +94,13 @@ class TransactionController extends Controller
 
     // handle withdraw
     public function storeWithdraw(Request $request){
+        $userAcccount = $this->getAccount();
+        $currentSolde = $userAcccount->solde;
 
         $amountWithdraw = $request->input('withdraw'); // amount to retrieve
         $type = 'withdraw';
-        $accountId = $this->getAccountId();
-        $currentSolde = Transaction::where('compte_source_id',$accountId)
-            ->orderBy('id','desc')
-            ->value('solde');
+        $accountId = $this->getAccount()->value('id');
+
 
         // check the min allowed to retrieve
         if( $amountWithdraw < 1000 ){
@@ -105,23 +114,35 @@ class TransactionController extends Controller
 
 
         // Perfomr Transaction
-        $newSole = $currentSolde - $amountWithdraw;
+        $newSolde = $currentSolde - $amountWithdraw;
         $transaction = new Transaction();
         $transaction -> type_transaction = $type;
         $transaction -> montant = $amountWithdraw;
-        $transaction -> solde = $newSole;
-        $transaction -> compte_source_id = $this -> getAccountId();
+//        dd($userAcccount->solde = $newSolde);
+         $this -> getAccount()->update(
+             ['solde' => $newSolde]
+         );
+
+        if(!$userAcccount){
+            $userAcccount -> solde = $newSolde;
+        }
+
+        $transaction -> compte_source_id = $this -> getAccount()->value('id');
         $transaction -> save();
 
         return redirect()->route('user.index')->with("withdrawPassed", "Transfere reusissi");
     }
 
 
-
-    public function getAccountId(){
-        $userId = Auth::user()->id;
-        return Auth::user()->with('comptes')->find($userId)->comptes[0]->id;
+    public function getUser(){
+        return Auth::user();
     }
+
+
+    public function getAccount(){
+        return CompteBancaire::where('user_id',$this -> getUser() -> id)->first();
+    }
+
 
     public function getUserId(){
         return Auth::user()->id;

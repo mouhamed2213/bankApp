@@ -34,9 +34,7 @@ class UserController extends Controller
     // get user balances
     public function balance(){
         $compteId = Auth::user()->comptes->first()->id;
-        $balancer = Transaction::where('compte_source_id',$compteId)
-            -> orderByDesc('id') // order by the most biuger id to the less
-            ->value('solde'); // get the firs value
+        $balancer = CompteBancaire::where('id',$compteId)->value('solde'); // get the firs value
 
         $solde = $balancer;
             return view('user.index',compact('solde'));
