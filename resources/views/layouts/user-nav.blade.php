@@ -15,9 +15,9 @@
             </a>
 
             <!-- Creer un compte -->
-            <a href="#"
+            <a href="{{ route('create_account.create.account') }}"
                class="inline-block px-4 py-2 bg-green-100 text-green-700 text-sm font-medium rounded-md hover:bg-green-200 transition">
-                Créer un compte
+                Creer un compte
             </a>
         </div>
 

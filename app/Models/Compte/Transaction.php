@@ -7,6 +7,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Transaction extends Model
 {
+    protected $fillable=[
+       "solde"
+   ];
+
     public function compteSource():BelongsTo{
         return $this->belongsTo(CompteBancaire::class, 'compte_source_id');
     }

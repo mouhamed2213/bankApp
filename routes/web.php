@@ -11,10 +11,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-////admin route
-//-Route::get('/admin-dash', [AdminController::class,'index'])>middleware(['auth', 'verified'])->name('dashboard');
-//
-
 // Admin ROUTE
 Route::middleware(['auth','verified'])->group(function(){
 
@@ -41,16 +37,15 @@ Route::middleware(['auth','verified'])->group(function(){
 
         // view form for deposite
         Route::get('/', [TransactionController::class,'index'])->name('index');
-        Route::get('deposit', [TransactionController::class,'storDeposit'])->name('deposit');
+        Route::POST('deposit', [TransactionController::class,'storDeposit'])->name('deposit');
 
         // handle withdraw
-        Route::get('withdraw', [TransactionController::class,'withdraw'])->name('withdraw');
-        Route::post('storeWithdraw', [TransactionController::class, 'storeWithdraw'])->name('storeWithdraw');
+        Route::get('withdraw', [TransactionController::class,'createWithdraw'])->name('withdraw.create');
+        Route::post('storeWithdraw', [TransactionController::class, 'storeWithdraw'])->name('withdraw.store');
 
 
 //                                        BEST ROUTING NAMING EXAMPLE
-                                        // Cretea is almost user to  display new create ressource
-        Route::get('transfer', [TransactionController::class,'transferCreate'])->name('transfer.create');
+         Route::get('transfer', [TransactionController::class,'transferCreate'])->name('transfer.create');
                                         // Store handle  the creation
         Route::get('transfer/store', [TransactionController::class,'transferStor'])->name('transfer.store');
     });
@@ -72,12 +67,14 @@ Route::middleware(['auth', 'verified'])->group(function () { // middlewar
         Route::get('/', [UserController::class, 'index'])->name('index');
     });
 
-                                    // create account route
+                                    // create account route ( TO AVOID
     Route::prefix('create_account')->name('create_account.')->group(function () {
         // store convention  better for new creation
         Route::post('/', [CompteBancaireController::class, 'store'])->name('store');
-    });
+        Route::get('createAccount', [CompteBancaireController::class, 'indexCreateAccount'])->name('create.account');
+        Route::post('storeAccount', [CompteBancaireController::class, 'storeAccount'])->name('store.account');
 
+    });
 });
 
 

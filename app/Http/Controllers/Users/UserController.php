@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Users;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Compte\CompteBancaireController;
 use App\Models\Compte\CompteBancaire;
 use App\Models\compte\Transaction;
 use Illuminate\Http\Request;
@@ -14,31 +15,9 @@ class UserController extends Controller
 
     // return to view index
     public function index(){
-        $userID = Auth::user()->id;
-        // check if the user has account but account is on pending
-        if(! Auth::user()->comptes->isEmpty()){
+        $userId = Auth::user()->id;
 
-            $user = Auth::user()->id; // recupere l'id de lutilsateur connectee
-
-            $userAccount = CompteBancaire::where('user_id',$user)->first();
-            $accountStatut = $userAccount->status;
-
-                if($accountStatut == "en attente"){
-                    Request()->session()->put('statut', true);
-                }
-        }
-
-        return $this->balance();
+        return  view('user.index');
     }
-
-    // get user balances
-    public function balance(){
-        $compteId = Auth::user()->comptes->first()->id;
-        $balancer = CompteBancaire::where('id',$compteId)->value('solde'); // get the firs value
-
-        $solde = $balancer;
-            return view('user.index',compact('solde'));
-    }
-
 
 }

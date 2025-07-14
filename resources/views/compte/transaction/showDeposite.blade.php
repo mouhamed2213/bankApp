@@ -14,7 +14,7 @@
         <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
             <h3 class="text-lg font-semibold mb-4 text-gray-700">Effectuer un Depot</h3>
 
-            <form method="PPOST" action=" {{ route('transaction.deposit') }} ">
+            <form method="POST" action=" {{ route('transaction.deposit') }} ">
                 @csrf
 
                 <!-- Montant -->
@@ -26,7 +26,20 @@
                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                 </div>
 
-<!--                Error -->
+                <div class="mb-4">
+                    <select name="choosedAccount" id="deposer" >
+
+                        <option> Choisir un compte  </option>
+                        @foreach($userAccount as $acccount)
+
+                            @if( !in_array( $acccount->status, ['en attente', 'rejected' ])  )
+                                <option>{{ $acccount->numero_compte }}</option>
+
+                            @endif
+                        @endforeach
+                    </select>
+                </div>
+
                 @if(session('depotRejected'))
                 <div class="alert alert-danger">
                    <p class=" text-red-600 ">  {{ session('depotRejected') }} </p>
@@ -42,7 +55,7 @@
                     </button>
                 </div>
             </form>
-        </div>
+        </form>
     </div>
 
 </x-user-layout>

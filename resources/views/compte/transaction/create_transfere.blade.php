@@ -49,6 +49,7 @@
                     <input type="number" name="amount" id="montant" required
                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
 
+
                     <!-- errors -->
                     @if(session('balanceNotEnought'))
                         <div class="mb-4 ">
@@ -64,6 +65,22 @@
                     </label>
                     <input name="accountNumber" id="description" rows="3" disabled
                               class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"></input>
+
+                    <select name="choosedAccount" id="amount" required>
+                        <option> Choisir un compte  </option>
+
+                        @foreach( $userAccount  as $accounts )
+                            @if( !in_array( $accounts ->status, ['en attente', 'rejected' ])  )
+                                <option> {{ $accounts -> numero_compte }} </option>
+                            @endif
+                        @endforeach
+                    </select>
+
+                    @if(session('chooseAccount'))
+                        <div class="mb-4 ">
+                            <p  class="text-red-500" > {{session('chooseAccount')}} </p>
+                        </div>
+                    @endif
                 </div>
 
                 <!-- Bouton de soumission -->

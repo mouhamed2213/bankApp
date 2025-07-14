@@ -11,32 +11,32 @@
     <h1> Vos comptes </h1>
 
     <x-table>
-<!--        // Table head-->
-        <x-slot name="MyTablehead">
-            <th> Comptes </th>
-            <th> Numero de Compte </th>
-            <th> Status </th>
-            <th> Soldes </th>
-            <th> creates </th>
-            <th> Actions </th>
+        <x-slot name="MyTableHead">
+            <tr>
+                <th>#</th>
+                <th>Numéro de Compte</th>
+                <th>Status</th>
+                <th>Solde</th>
+                <th>Créé le</th>
+                <th>Actions</th>
+            </tr>
         </x-slot>
 
-        <!-- Table Body -->
-        @foreach( $userDatas as $data )
-
-            <td>  <?php $nbr = 0; $i = $nbr + 1;   echo( $i );?></td>
-            <td> {{ $data -> numero_compte }} </td>
-            <td> {{ $data -> status }} </td>
-            <td> {{ $data -> solde }} Fcfa </td>
-            <td>  {{ $data -> created_at }} </td>
+        @foreach ($userDatas as $index => $data)
+        <tr>
+            <td>{{ $index + 1 }}</td>
+            <td>{{ $data->numero_compte }}</td>
+            <td>{{ $data->status }}</td>
+            <td>{{ $data->solde }} FCFA</td>
+            <td>{{ $data->created_at }}</td>
             <td>
-                <a href="compte/{{$data -> id}}" class=" text-blue-900"> Detail  </a>
-                <a href="#" class="text-red-900" " >  Demande De fermeture  </a>
+                <a href="{{ route('compte.show', $data->id) }}" class="text-blue-900">🔎 Détail</a>
+                <a href="#" class="text-red-900">⛔ Demande fermeture</a>
             </td>
+        </tr>
         @endforeach
-
-
     </x-table>
+
 
 
 

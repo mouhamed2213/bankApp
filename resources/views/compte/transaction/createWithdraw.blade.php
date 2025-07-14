@@ -28,7 +28,7 @@
         <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
             <h3 class="text-lg font-semibold mb-4 text-gray-700">Effectuer un Retrait</h3>
 
-            <form method="POST" action=" {{ route('transaction.storeWithdraw') }} ">
+            <form method="POST" action=" {{ route('transaction.withdraw.store') }} ">
                 @csrf
 
                 <!-- Montant -->
@@ -38,6 +38,18 @@
                     </label>
                     <input type="number" name="withdraw" id="withdraw" required
                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+
+                        <select name="choosedAccount" id="amount" required>
+                            <option> Choisir un compte  </option>
+
+                            @foreach( $userAccount  as $accounts )
+                                @if( !in_array( $accounts ->status, ['en attente', 'rejected' ])  )
+                                     <option> {{ $accounts -> numero_compte }} </option>
+                                @endif
+                            @endforeach
+
+                        </select>
+                    </label>
                 </div>
 
                 <!--                Error -->
@@ -52,6 +64,12 @@
                 @if(session('balanceNotEnought'))
                 <div class="alert alert-danger">
                     <p class=" text-red-600 ">  {{ session('balanceNotEnought') }} </p>
+                </div>
+                @endif
+
+                @if(session('chooseAccount'))
+                <div class="alert alert-danger">
+                    <p class=" text-red-600 ">  {{ session('chooseAccount') }} </p>
                 </div>
                 @endif
 
