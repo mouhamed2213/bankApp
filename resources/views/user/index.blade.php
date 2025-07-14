@@ -89,9 +89,6 @@
             </div>
 
 
-
-    @endif
-
             <!--    Historique -->
             <div class="bg-white p-6 shadow  max-w-7xl mx-auto py-10 px-5 rounded-3xl m-3  lg:rounded-4xl ">
                 <h3 class="text-lg font-bold mb-4">Historique des dernières opérations</h3>
@@ -111,6 +108,8 @@
                 </ul>
             </div>
         </div>
+
+    @endif
 
     @if (Auth::user()->comptes->first()?->status == 'en attente')
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Compte;
 
 use App\Http\Controllers\Controller;
+use App\Service\CompteBancaireService;
 use App\Models\User;
 use App\Models\Compte\CompteBancaire;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -10,15 +11,23 @@ use Illuminate\Http\Request;
 
 class CompteBancaireController extends Controller
 {
+    // display user compte bancarie info
     public function index(){
-        return view('compte.index');
+        $userDatas = CompteBancaireService::userDatas();
+
+        return view('compte.index', compact('userDatas'));
     }
 
+    // show user bank account detaill
+    public function show(Request $request){
+            // one account
+        $userData = CompteBancaireService::userData( $request->id );
+        dd( $userData );
+        return view('compte.show-user-detail');
+    }
 
     // store bank information
     public function store (Request $request) {
-
-
         $id_user = $request->input('id_user');
         $type_de_compte = $request->input('type_account');
 

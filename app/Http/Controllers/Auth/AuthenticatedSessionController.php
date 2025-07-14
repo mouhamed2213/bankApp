@@ -30,6 +30,10 @@ class AuthenticatedSessionController extends Controller
 
         $user = Auth::user();
         if($user-> role == "client"){
+
+            session()->put([ 'connectedUserID' => $user->id]); //
+            session()->put([ 'active_account_id' => $user->compte->first()?->id ]); // default accout
+
             return redirect()->route('user.index');
         }else if($user->role == "admin"){
             return redirect()->route('admin.dashboard');

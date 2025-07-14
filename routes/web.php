@@ -56,9 +56,10 @@ Route::middleware(['auth','verified'])->group(function(){
     });
 
 
-                                    // A HANDLE ACCOUNT ROUTES
+                                    // A HANDLE  USER ACCOUNT ROUTES
         Route::prefix('compte')->name('compte.')->group(function() {
             Route::get('/' , [ CompteBancaireController::class, 'index'] )->name('index');
+            Route::get('/{id}' , [ CompteBancaireController::class, 'show'] )->name('show');
         });
 
 });
