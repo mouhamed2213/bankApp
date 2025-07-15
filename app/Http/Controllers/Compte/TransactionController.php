@@ -41,7 +41,7 @@ class TransactionController extends Controller
 
         // performa the transfere
         $transaction ->  transferToRecipient($request);
-        return view('user.index');
+        return redirect()->route('user.index');
     }
 
 
@@ -76,11 +76,14 @@ class TransactionController extends Controller
                 $accountDetail->update(
                     [ 'solde' => $newAccountSold ],
                 );
-
                 $transaction -> save(); // save if true
             }
 
-            return redirect()->route('user.index')->with("depotPassed", "Transfere reusissi");
+            return redirect()->route('user.index')
+                ->with("depotPassed", "Depot reuissi  reusissi \n".
+                    "Montant : ".$amount.' Fcfa'.
+                    "Solde : ".$newAccountSold. ' Fcfa'.
+                    "Depot effectuer sur : ".$accountDetail->value('numero_compte'));
         }
     }
 
@@ -88,8 +91,6 @@ class TransactionController extends Controller
     // handle withdraw
     public function createWithdraw(){
         $userAccount  = Auth::user()->comptes;
-        $accountId = session('active_account_id');
-
         return view('compte.transaction.createWithdraw', compact('userAccount'));
     }
 
@@ -97,8 +98,8 @@ class TransactionController extends Controller
     public function storeWithdraw(Request $request){
 
         $choosedAccount = $request -> input('choosedAccount');
-        $userAcccount = $this->getAccount();
-        $currentSolde = $this->getAccount()->value('solde'); // get the user account balance
+        $userAcccount = $this->getAccount($choosedAccount);
+        $currentSolde = $this->getAccount($choosedAccount)->value('solde'); // get the user account balance
 
         $amountWithdraw = $request->input('withdraw'); // amount to retrieve
         $type = 'withdraw';
@@ -122,7 +123,7 @@ class TransactionController extends Controller
         $transaction = new Transaction();
         $transaction -> type_transaction = $type;
         $transaction -> montant = $amountWithdraw;
-         $this -> getAccount()->update(
+         $this -> getAccount($choosedAccount)->update(
              ['solde' => $newSolde]
          );
 
@@ -130,10 +131,14 @@ class TransactionController extends Controller
             $userAcccount -> solde = $newSolde;
         }
 
-        $transaction -> compte_source_id = $this -> getAccount()->value('id');
+        $transaction -> compte_source_id = $this -> getAccount($choosedAccount)->value('id');
         $transaction -> save();
 
-        return redirect()->route('user.index')->with("withdrawPassed", "Transfere reusissi");
+        return redirect()->route('user.index')
+            ->with("withdrawPassed", "Vous avez retirer".
+                $amountWithdraw . ' Fcfa.'.
+                ' Dans votre compte : '.$choosedAccount.
+                '. Solde : '.$newSolde);
     }
 
 
@@ -141,8 +146,8 @@ class TransactionController extends Controller
         return Auth::user();
     }
 
-    public function getAccount(){
-        return  CompteBancaire::where('user_id',$this -> getUser() -> id);
+    public function getAccount($choosedAccount){
+        return  CompteBancaire::where('numero_compte',$choosedAccount);
     }
 
 

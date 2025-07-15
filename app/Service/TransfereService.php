@@ -40,7 +40,7 @@ class TransfereService
 
     // send transfere to the recipient
     public function transferToRecipient(Request $request){
-
+            $transfereSucced = false;
         // perfome the transfer
         if( $this->store($request) ){
             $type = 'virement';
@@ -65,8 +65,6 @@ class TransfereService
             $transaction -> compte_dest_id  =  $recipientAccountId;
             $transaction -> compte_source_id  =   $this->currentAccount( $choosedAccount )->value('id')  ;
 
-            $transaction -> save();
-
             // update the source balanace
             $this->currentAccount($choosedAccount)->update
             (["solde"  =>  $newCurrentUserBalance]);
@@ -74,9 +72,19 @@ class TransfereService
             // trasfere to recipient
             $oldRecipientAccountBalance = $this -> currentRecipientAccount($recipientAccount)-> solde ;
             $recipientBalance =  $oldRecipientAccountBalance + $receiveAmount;
-
             $this -> currentRecipientAccount($recipientAccount)
                 ->update(['solde' => $recipientBalance]);
+
+            // save the transfere
+            $transaction -> save();
+
+            // flash message
+            session()
+                ->flash('transferesucced', 'Aveez transefer '.
+                $recipientAccount.' Fcfa au compte.
+                Numero De Compte :'.$choosedAccount.
+                'Solde' .$newCurrentUserBalance.' : Fcfa');
+
         }else{
             dd("Transfere echoue");
         }

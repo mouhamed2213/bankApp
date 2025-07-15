@@ -33,6 +33,7 @@ class AuthenticatedSessionController extends Controller
         if($user-> role == "client"){
 
             session()->put([ 'connectedUserID' => $user->id]); //
+//            session()->put(['accountStatus', $user]);
             session()->put([ 'active_account_id' => $user->comptes->first()?->id ]); // default accout
 
             return redirect()->route('user.index');

@@ -37,8 +37,8 @@ class AdminController extends Controller
         // update the state of the account state
             $update = CompteBancaire::findOrFail($id);
             $update -> status ="active";
-//            $update -> save();
-            return redirect()->route('requests.requestsPending')->with('user account active with success');
+            $update -> save();
+            return redirect()->route('requests.requestsPending')->with('accountValidated', 'ok');
     }
 
     // rejected account
@@ -47,8 +47,9 @@ class AdminController extends Controller
         // update the state of the account state
             $update = CompteBancaire::findOrFail($id);
             $update -> status ="rejected";
-            $update -> save();
-            return redirect()->route('requests.requestsPending')->with('deleted successed');
+//            $update -> save();
+            return redirect()->route('requests.requestsPending')
+                ->with('rejected_accoute', 'la demande d\'ouvertur de compte n a pas ete accepter');
     }
 
 

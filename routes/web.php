@@ -47,7 +47,7 @@ Route::middleware(['auth','verified'])->group(function(){
 //                                        BEST ROUTING NAMING EXAMPLE
          Route::get('transfer', [TransactionController::class,'transferCreate'])->name('transfer.create');
                                         // Store handle  the creation
-        Route::get('transfer/store', [TransactionController::class,'transferStor'])->name('transfer.store');
+        Route::post('transfer/store', [TransactionController::class,'transferStor'])->name('transfer.store');
     });
 
 
@@ -55,6 +55,7 @@ Route::middleware(['auth','verified'])->group(function(){
         Route::prefix('compte')->name('compte.')->group(function() {
             Route::get('/' , [ CompteBancaireController::class, 'index'] )->name('index');
             Route::get('/{id}' , [ CompteBancaireController::class, 'show'] )->name('show');
+            Route::post('switchAccount' , [ CompteBancaireController::class, 'switchAccount'] )->name('switchAccount');
         });
 
 });

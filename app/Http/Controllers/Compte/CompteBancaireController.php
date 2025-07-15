@@ -18,6 +18,19 @@ class CompteBancaireController extends Controller
         return view('compte.index', compact('userDatas'));
     }
 
+    public function switchAccount(Request $request){
+        $switchAccount = $request -> input('active_account_id');
+        // get the the selected account from the id
+        session()->put('switchAccount', $switchAccount);
+//        session()->put('active_account_id', $switchAccount);
+
+
+        $selectedAccount = Auth::user() -> comptes  -> where("id", $switchAccount);
+//        dd($selectedAccount->all());
+        return view( 'user.index', compact('selectedAccount'));
+    }
+
+
     public function indexCreateAccount(){
         $userDatas = CompteBancaireService::userDatas();
         return view('compte.createAccount', compact('userDatas'));
@@ -40,7 +53,6 @@ class CompteBancaireController extends Controller
         $bankAccount  = new CompteBancaireService ();
         $bankAccount -> createBankAccount($userId);
 
-
         return redirect()->route('user.index')->with('success', 'Compte créé avec succès!');
     }
 
@@ -50,7 +62,7 @@ class CompteBancaireController extends Controller
         $bankAccount  = new CompteBancaireService ();
         $saved = $bankAccount -> createBankAccount($userId);
         if($saved){
-            return redirect()->route('user.index');
+            return redirect()->route('user.index')->with('accountCreated','Votre demande douverture de compte est en cour de validation');
         }
     }
 
