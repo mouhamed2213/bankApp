@@ -11,6 +11,14 @@ class Transaction extends Model
        "solde"
    ];
 
+
+    //History validcolumn
+    public function scopeValid($query){
+        return $query
+            ->whereNotNull('montant')
+            ->whereNotNull('type_transaction');
+    }
+
     public function compteSource():BelongsTo{
         return $this->belongsTo(CompteBancaire::class, 'compte_source_id');
     }

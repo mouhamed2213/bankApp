@@ -5,6 +5,7 @@ use App\Http\Controllers\Compte\TransactionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Users\UserController;
 use App\Http\Controllers\Compte\CompteBancaireController;
+use App\Http\Controllers\virtualCard\VirtualCardController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -55,7 +56,7 @@ Route::middleware(['auth','verified'])->group(function(){
         Route::prefix('compte')->name('compte.')->group(function() {
             Route::get('/' , [ CompteBancaireController::class, 'index'] )->name('index');
             Route::get('/{id}' , [ CompteBancaireController::class, 'show'] )->name('show');
-            Route::post('switchAccount' , [ CompteBancaireController::class, 'switchAccount'] )->name('switchAccount');
+            Route::post('switchAccount' , [ UserController::class, 'switchAccount'] )->name('switchAccount');
         });
 
 });
@@ -76,6 +77,14 @@ Route::middleware(['auth', 'verified'])->group(function () { // middlewar
         Route::post('storeAccount', [CompteBancaireController::class, 'storeAccount'])->name('store.account');
 
     });
+});
+
+
+// Virtual card
+Route::prefix('virtualCard')->name('virtualCard.')->group(function () {
+   Route::get('/', [VirtualCardController::class, 'index'])->name('index');
+   Route::get('/virtual-card', [VirtualCardController::class, 'index'])->name('download');
+
 });
 
 

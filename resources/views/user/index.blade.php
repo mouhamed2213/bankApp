@@ -43,18 +43,15 @@
                 <!-- 2. CAS : LE COMPTE EST ACTIF -->
                 @if(Auth::user()->comptes->first()?->status == 'active')
                         <!-- Carte de Solde -->
-                <div class="bg-gradient-to-r from-green-600 to-emerald-700 text-white rounded-xl shadow-lg p-8 mb-8">
+                <div class="bg-gradient-to-r from-green-700 to-emerald-700 text-white rounded-xl shadow-lg p-8 mb-8 ">
                             <div class="flex justify-between items-center">
                                 <div>
                                     <p class="text-sm uppercase tracking-wider opacity-80">Solde Actuel</p>
-                                @if(session('switchAccount') )
-                                    <p class="text-4xl font-bold mt-1">{{ $selectedAccount -> solde }}  <span class="text-2xl font-black">FCFA</span></p>
-                                 @elseif
                                     <p class="text-4xl font-bold mt-1">{{ $solde_user }}  <span class="text-2xl font-black">FCFA</span></p>
-                                 @endif
+                                    <p class="text-sm lowercase tracking-wider opacity-80">Compte en cour d'utilisation {{ $numero_compte }} </p>
 
                                 </div>
-                                <div class="text-right">
+                                <div class="text-right ">
                                     <p class="text-sm uppercase tracking-wider opacity-80">Type de compte</p>
                                     <p class="text-lg font-semibold bg-white/20 px-3 py-1 rounded-full mt-2">{{ $type_compte }}</p>
                                 </div>
@@ -84,23 +81,24 @@
 
                         <!-- Historique des transactions -->
                         <div class="bg-white p-6 shadow-sm rounded-lg">
-                            <h3 class="text-lg font-semibold mb-4 text-gray-900">Historique des opérations</h3>
+                           <div class="flex justify-between items-center p-2">
+                               <h3 class="text-lg font-semibold mb-4 text-gray-900">Historique des operations</h3>
+                               <span><a href="#">Tout voir</a></span>
+                           </div>
+
                             <ul class="divide-y divide-gray-200">
-                                {{-- Style amélioré pour chaque ligne de l'historique --}}
+                            @foreach($history as $historyTrans)
+
                                 <li class="py-3 flex justify-between items-center">
                                     <div>
-                                        <p class="text-sm font-medium text-gray-800">Dépôt</p>
-                                        <p class="text-sm text-gray-500">08/07/2025 14:30</p>
+                                        <p class="text-sm font-medium text-gray-800">{{ $historyTrans->type_transaction }} </p>
+                                        <p class="text-sm text-gray-500">{{ $historyTrans ->created_at }}</p>
                                     </div>
-                                    <span class="text-sm font-semibold text-green-600">+ 50 000 FCFA</span>
+                                    <span class="text-sm font-semibold text-gray-600"> {{ $historyTrans->montant }} FCFA</span>
                                 </li>
-                                <li class="py-3 flex justify-between items-center">
-                                    <div>
-                                        <p class="text-sm font-medium text-gray-800">Virement à John Doe</p>
-                                        <p class="text-sm text-gray-500">07/07/2025 10:15</p>
-                                    </div>
-                                    <span class="text-sm font-semibold text-red-600">- 25 000 FCFA</span>
-                                </li>
+                            @endforeach
+
+
                                 <li class="py-3 flex justify-between items-center">
                                     <div>
                                         <p class="text-sm font-medium text-gray-800">Paiement Facture SNE</p>
@@ -203,4 +201,5 @@
             box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
         }
     </style>
+
 </x-user-layout>

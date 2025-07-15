@@ -30,7 +30,6 @@ class TransactionController extends Controller
     public function transferStor(Request $request,  TransfereService $transaction){
 
         $transaction->store($request);
-        $valide = false;
         if(session('balanceNotEnought') !== null){
             return back();
         }
@@ -69,7 +68,7 @@ class TransactionController extends Controller
             $transaction = new Transaction();
             $transaction -> type_transaction  = $type;
             $transaction -> montant =  $amount ;
-            $transaction -> compte_source_id = $this->getAccount()->value('id');
+            $transaction -> compte_source_id =   CompteBancaire::where('numero_compte',$choosedAccount)->value('id');
 
             if ($accountDetail) {
                 $newAccountSold = $amount + $accountSold;
@@ -98,8 +97,8 @@ class TransactionController extends Controller
     public function storeWithdraw(Request $request){
 
         $choosedAccount = $request -> input('choosedAccount');
-        $userAcccount = $this->getAccount($choosedAccount);
-        $currentSolde = $this->getAccount($choosedAccount)->value('solde'); // get the user account balance
+        $userAcccount =  CompteBancaire::where('numero_compte', $choosedAccount);
+        $currentSolde =  CompteBancaire::where('numero_compte', $choosedAccount)->value('solde'); // get the user account balance
 
         $amountWithdraw = $request->input('withdraw'); // amount to retrieve
         $type = 'withdraw';
@@ -123,15 +122,16 @@ class TransactionController extends Controller
         $transaction = new Transaction();
         $transaction -> type_transaction = $type;
         $transaction -> montant = $amountWithdraw;
-         $this -> getAccount($choosedAccount)->update(
-             ['solde' => $newSolde]
-         );
+        $transaction -> compte_source_id = CompteBancaire::where('numero_compte',$choosedAccount)->value('id');
 
-        if(!$userAcccount){
-            $userAcccount -> solde = $newSolde;
+//        $userAcccount = $userAcccount
+
+        if($userAcccount){
+            $userAcccount ->update ([
+                'solde' => $newSolde
+            ]) ;
         }
 
-        $transaction -> compte_source_id = $this -> getAccount($choosedAccount)->value('id');
         $transaction -> save();
 
         return redirect()->route('user.index')
@@ -146,9 +146,9 @@ class TransactionController extends Controller
         return Auth::user();
     }
 
-    public function getAccount($choosedAccount){
-        return  CompteBancaire::where('numero_compte',$choosedAccount);
-    }
+//    public function getAccount($choosedAccount){
+//        return  CompteBancaire::where('numero_compte',$choosedAccount);
+//    }
 
 
     public function getUserId(){

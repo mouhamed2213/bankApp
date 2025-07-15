@@ -14,21 +14,12 @@ class CompteBancaireController extends Controller
 {
     // display user compte bancarie info
     public function index(){
+
         $userDatas = CompteBancaireService::userDatas();
+
         return view('compte.index', compact('userDatas'));
     }
 
-    public function switchAccount(Request $request){
-        $switchAccount = $request -> input('active_account_id');
-        // get the the selected account from the id
-        session()->put('switchAccount', $switchAccount);
-//        session()->put('active_account_id', $switchAccount);
-
-
-        $selectedAccount = Auth::user() -> comptes  -> where("id", $switchAccount);
-//        dd($selectedAccount->all());
-        return view( 'user.index', compact('selectedAccount'));
-    }
 
 
     public function indexCreateAccount(){

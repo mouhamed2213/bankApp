@@ -40,20 +40,15 @@ class TransfereService
 
     // send transfere to the recipient
     public function transferToRecipient(Request $request){
-            $transfereSucced = false;
+
         // perfome the transfer
         if( $this->store($request) ){
             $type = 'virement';
             $recipientAccount = request("recipient");
             $choosedAccount = $request->input("choosedAccount");
+            $recipientAccountId =  $this-> currentRecipientAccount($recipientAccount) -> value('id'); // recipient id
 
-
-            $recipientAccountId =  $this-> currentRecipientAccount($recipientAccount)->id; // recipient id
-
-            $RecipientAccountNumber = $request -> input('recipient'); // recipient account number
             $receiveAmount =  $request -> input('amount'); // amount to receive
-
-            $currentUserAccountId = $this->currentAccount($choosedAccount)->value('id'); // user perform transfere id
 
             $currentUserBalance = $this->currentAccount($choosedAccount) -> value('solde')  ;
             // perform operations
@@ -64,16 +59,17 @@ class TransfereService
             $transaction -> montant  = $receiveAmount;
             $transaction -> compte_dest_id  =  $recipientAccountId;
             $transaction -> compte_source_id  =   $this->currentAccount( $choosedAccount )->value('id')  ;
-
             // update the source balanace
             $this->currentAccount($choosedAccount)->update
             (["solde"  =>  $newCurrentUserBalance]);
 
             // trasfere to recipient
-            $oldRecipientAccountBalance = $this -> currentRecipientAccount($recipientAccount)-> solde ;
+            $oldRecipientAccountBalance = $this -> currentRecipientAccount($recipientAccount)-> value('solde') ;
+
             $recipientBalance =  $oldRecipientAccountBalance + $receiveAmount;
             $this -> currentRecipientAccount($recipientAccount)
                 ->update(['solde' => $recipientBalance]);
+//            dd($transaction);
 
             // save the transfere
             $transaction -> save();
@@ -95,9 +91,18 @@ class TransfereService
         return CompteBancaire::where('numero_compte', $choosedAccount); // return current account balance
     }
 
-    public function currentRecipientAccount($recipientAccount){
-        return  CompteBancaire::where('numero_compte',$recipientAccount)->first();
+    public function currentRecipientAccount($recipientAccountNumber){
+
+        $recipientAccount =   CompteBancaire::where('numero_compte',$recipientAccountNumber);
+//        dd($recipientAccount->value('id'));
+
+        if(!$recipientAccount->value('status') == 'actif'){
+//            dd($recipientAccount->value('status'));
+             return back()->with('accountNotExist','Ce compte n\'existe pas');
+        }
+
+        return $recipientAccount;
+//        return  CompteBancaire::where('numero_compte',$recipientAccount);
+
     }
-
-
 }

@@ -4,19 +4,19 @@
         {{-- Liens à gauche sous forme de boutons --}}
         <div class="flex items-center gap-4">
             <a href="{{ route('user.index') }}"
-               class="inline-block px-4 py-2 bg-green-100 text-green-700 text-sm font-medium rounded-md hover:bg-green-200 transition">
+               class="inline-block px-4 py-2 bg-green-600 text-white text-sm font-bold rounded-md hover:bg-green-400 transition">
                 Accueil
             </a>
 
             <!-- Creer un compte -->
             <a href="{{ route('compte.index') }}"
-               class="inline-block px-4 py-2 bg-green-100 text-green-700 text-sm font-medium rounded-md hover:bg-green-200 transition">
+               class="inline-block px-4 py-2 bg-green-600 text-white text-sm font-bold rounded-md hover:bg-green-400 transition">
                 Mes Comptes
             </a>
 
             <!-- Creer un compte -->
             <a href="{{ route('create_account.create.account') }}"
-               class="inline-block px-4 py-2 bg-green-100 text-green-700 text-sm font-medium rounded-md hover:bg-green-200 transition">
+               class="inline-block px-4 py-2 bg-green-600 text-white text-sm font-bold rounded-md hover:bg-green-400 transition">
                 Creer un compte
             </a>
 

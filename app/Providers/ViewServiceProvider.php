@@ -2,14 +2,19 @@
 
 namespace App\Providers;
 
+use AllowDynamicProperties;
 use App\Models\Compte\CompteBancaire;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Support\ServiceProvider;
 
-class ViewServiceProvider extends ServiceProvider
+#[AllowDynamicProperties] class ViewServiceProvider extends ServiceProvider
 {
+    public
+        $activeCompte = '';
+
+
     /**
      * Register services.
      */
@@ -22,22 +27,32 @@ class ViewServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+
         View::composer('*', function ($view) {
             $user = Auth::user();
 
             if ($user && $user->comptes->isNotEmpty()) {
-                $activeCompte = session('active_accounts_id')
-                    ? $user->comptes->where('id', session('active_account_id'))->first()
-                    : $user->comptes->first();
+                if(session('default_accounts_id')){
+                    $this->activeCompte = $user->comptes->where('id', session('default_accounts_id'));
 
-                $solde = $activeCompte?->solde ?? 0;
-                $numeroCompte = $activeCompte?->numero_compte ?? 0;
-                $codeBanque = $activeCompte?->code_banque ?? 0;
-                $codeGuichet = $activeCompte?->code_guichet ?? 0;
-                $typeCompte = $activeCompte?->type_de_compte ?? 'not type';
-                $statuscompte = $activeCompte?->status ?? 'not status';
-                $dateCreation = $activeCompte?-> created_at ?? 'not date creation';
+                    if(session('switchAccount_id')){
+                        $this->activeCompte = $user->comptes->where('id', session('switchAccount_id'));
+                    }
+                } else{
+                    $this->activeCompte = $user->comptes->where('id', 'default_accounts_id');
+
+                }
+
+//            dd($this->activeCompte->value('id'));
+
+
+                $solde = $this->activeCompte ?->value('solde') ?? 0;
+                $numeroCompte = $this->activeCompte ?->value('numero_compte') ?? 00;
+                $codeBanque = $this->activeCompte?->value('code_banque') ?? 0;
+                $codeGuichet = $this->activeCompte?->value('code_guichet') ?? 0;
+                $typeCompte = $this->activeCompte?->value('type_de_compte') ?? 'not type';
+                $statuscompte = $this->activeCompte?->value('status') ?? 'not status';
+                $dateCreation =$this->activeCompte?->value(' created_at')  ?? 'not date creation';
 
                 $view->with([
                     'solde_user'=> $solde,
@@ -50,7 +65,6 @@ class ViewServiceProvider extends ServiceProvider
 
 
         // get account information
-
         View::composer('compte.index', function ($view) {
             $user = Auth::user();
             if ($user && $user->comptes->isNotEmpty()) {
