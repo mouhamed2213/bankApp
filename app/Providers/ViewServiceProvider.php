@@ -85,8 +85,8 @@ use function Pest\Laravel\get;
 
             // if the the switchAccount_id is null take default_account_id
             $accountId =  session('switchAccount_id')
-                ??   session('default_accounts_id');
-//                ?? Auth::user()->comptes->first()?->id; // AT LEASTE GET THIS USER ID HHHHHHHHHHHHH
+                ??   session('default_accounts_id')
+                ?? Auth::user()->comptes->first()?->id; // AT LEASTE GET THIS USER ID HHHHHHHHHHHHH
 
             $getVirtualCard = VirtualCard::where('compte_id' , $accountId)?->first();
 

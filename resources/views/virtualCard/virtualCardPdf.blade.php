@@ -16,7 +16,6 @@
 
 <div class="text-center">
 
-    @if(session('hasBankCard'))
 
     <div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-100" role="alert">
         {{ session('hasBankCard') }}
@@ -33,44 +32,24 @@
         </div>
 
         <div class="text-center">
-            <span class="text-xl font-mono tracking-widest">{{ $cardNumber }}</span>
+            <span class="text-xl font-mono tracking-widest">{{ $currentVirtualCard -> numero_carte }}</span>
         </div>
 
         <div class="flex justify-between items-end text-xs uppercase">
             <div>
                 <span class="font-light text-gray-300">Titulaire</span>
-                <p class="font-medium text-sm tracking-wider">{{ $username }}</p>
+                <p class="font-medium text-sm tracking-wider">{{ Auth::user()->prenom }}</p>
             </div>
             <div class="text-right">
                 <span class="font-light text-gray-300">Expire fin</span>
-                <p class="font-medium">{{ $expired }}</p>
+                <p class="font-medium">{{  $currentVirtualCard -> date_expiration }}</p>
             </div>
             <div class="text-right">
                 <span class="font-light text-gray-300">CVV</span>
-                <p class="font-medium">{{ $CVV }}</p>
+                <p class="font-medium">{{  $currentVirtualCard -> CVV }}</p>
             </div>
         </div>
     </div>
-
-    <!-- telecharger -->
-    <a href="{{ route('virtualCard.download') }}" class="inline-block mt-6 px-6 py-3 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-75">
-        Télécharger ma carte
-    </a>
-
-    @else
-
-    <!-- not have a card -->
-    <div class="p-6 max-w-sm mx-auto bg-white rounded-xl shadow-md text-center">
-        <h3 class="text-xl font-medium text-black">Carte Virtuelle</h3>
-        <p class="text-gray-500 mt-2">Vous ne disposez pas encore de carte virtuelle associée à ce compte.</p>
-
-        <!-- download btn -->
-        <a href="{{ route('virtualCard.create') }}" class="inline-block mt-6 px-6 py-3 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-75">
-            Générer ma carte maintenant
-        </a>
-    </div>
-
-    @endif
 
 </div>
 

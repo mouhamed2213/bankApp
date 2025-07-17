@@ -83,7 +83,7 @@ Route::middleware(['auth', 'verified'])->group(function () { // middlewar
 // Virtual card
 Route::prefix('virtualCard')->name('virtualCard.')->group(function () {
    Route::get('/', [VirtualCardController::class, 'index'])->name('index');
-    Route::get('/virtual-card', [VirtualCardController::class, 'index'])->name('download');
+    Route::get('/download', [VirtualCardController::class, 'download'])->name('download');
     Route::get('/create', [VirtualCardController::class, 'create'])->name('create');
     Route::post('/store', [VirtualCardController::class, 'store'])->name('store');
 
