@@ -36,6 +36,9 @@ class AuthenticatedSessionController extends Controller
 //            session()->put(['accountStatus', $user]);
             session()->put([ 'default_accounts_id' => $user->comptes->first()?->id ]); // default accout
 
+            $check=[true. false]; // virtual card
+            session(['hasBankCard'  =>  true]);
+
             return redirect()->route('user.index');
         }else if($user->role == "admin"){
             return redirect()->route('admin.dashboard');

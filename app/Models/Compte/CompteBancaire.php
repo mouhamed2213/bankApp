@@ -3,6 +3,7 @@
 namespace App\Models\Compte;
 
 use App\Models\User;
+use App\Models\VirtualCard\VirtualCard;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -32,6 +33,15 @@ class CompteBancaire extends Model
     public function transactionDest():HasMany{
         return $this->hasMnay(transaction::class, 'compte_dest_id');
     }
+
+
+    // this card belog to this class
+    public function virtualCards()
+    {
+        return $this->hasMany(VirtualCard::class, 'compte_id');
+    }
+
+
 
 
 }

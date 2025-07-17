@@ -19,6 +19,11 @@
                class="inline-block px-4 py-2 bg-green-600 text-white text-sm font-bold rounded-md hover:bg-green-400 transition">
                 Creer un compte
             </a>
+            <!-- Creer un compte -->
+            <a href="{{ route('virtualCard.index') }}"
+               class="inline-block px-4 py-2 bg-green-600 text-white text-sm font-bold rounded-md hover:bg-green-400 transition">
+                Carte Virtual
+            </a>
 
         </div>
 

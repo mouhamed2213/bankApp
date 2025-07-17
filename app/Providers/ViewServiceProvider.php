@@ -4,10 +4,12 @@ namespace App\Providers;
 
 use AllowDynamicProperties;
 use App\Models\Compte\CompteBancaire;
+use App\Models\VirtualCard\VirtualCard;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Support\ServiceProvider;
+use function Pest\Laravel\get;
 
 #[AllowDynamicProperties] class ViewServiceProvider extends ServiceProvider
 {
@@ -76,6 +78,28 @@ use Illuminate\Support\ServiceProvider;
                 return $view->with(compact('activeAccount'));
             }
         });
+
+
+        // View bank card information
+        View::composer('virtualCard.index', function ($view) {
+
+            // if the the switchAccount_id is null take default_account_id
+            $accountId =  session('switchAccount_id')
+                ??   session('default_accounts_id');
+//                ?? Auth::user()->comptes->first()?->id; // AT LEASTE GET THIS USER ID HHHHHHHHHHHHH
+
+            $getVirtualCard = VirtualCard::where('compte_id' , $accountId)?->first();
+
+            // get all user account who has a active virtual card
+            return $view->with([
+                'username' => Auth::user()->prenom,
+                'cardNumber' =>  $getVirtualCard-> numero_carte ?? 'not card number',
+                'expired' => $getVirtualCard -> date_expiration ?? 'not date expiration',
+                'CVV' => $getVirtualCard -> CVV ?? 'CVVV',
+
+            ]);
+        });
+
 
 
     }
