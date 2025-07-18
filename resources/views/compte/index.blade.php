@@ -1,4 +1,6 @@
 <x-user-layout>
+
+
     {{-- Fond général pour la page --}}
     <div class="bg-gray-50 min-h-screen">
 
@@ -11,40 +13,38 @@
             </div>
         </x-slot>
 
+        @if(Auth::user()->comptes->isNotEmpty())
 
+            <div class="py-12">
+                <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                    <div class="p-4 bg-green-50 border border-green-200 rounded-lg shadow-sm">
 
-        <div class="py-12">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                        <!-- Titre de la carte -->
+                        <h3 class="text-sm font-semibold text-green-800 mb-2">
+                            Changer de compte actif
+                        </h3>
 
+                        <!-- Formulaire avec le select -->
+                        <form action="{{ route('compte.switchAccount') }}" method="POST" id="accountSwitchForm">
+                            @csrf
+                            <div class="flex items-center  space-x-2">
+                                <select name="active_account_id" id="active_account_id" class="block w-1/2 px-3 py-2 bg-white border border-green-300 rounded-md text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                                    @foreach( $activeAccount as $accountStatus)
+                                    <option
+                                        value="{{ $accountStatus->id }}">
+                                    {{ $accountStatus->numero_compte }}
+                                    </option>
+                                    @endforeach
+                                </select>
 
-                <div class="p-4 bg-green-50 border border-green-200 rounded-lg shadow-sm">
-
-                    <!-- Titre de la carte -->
-                    <h3 class="text-sm font-semibold text-green-800 mb-2">
-                        Changer de compte actif
-                    </h3>
-
-                    <!-- Formulaire avec le select -->
-                    <form action="{{ route('compte.switchAccount') }}" method="POST" id="accountSwitchForm">
-                        @csrf
-                        <div class="flex items-center  space-x-2">
-                            <select name="active_account_id" id="active_account_id" class="block w-1/2 px-3 py-2 bg-white border border-green-300 rounded-md text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500">
-                                @foreach( $activeAccount as $accountStatus)
-                                <option
-                                    value="{{ $accountStatus->id }}">
-                                {{ $accountStatus->numero_compte }}
-                                </option>
-                                @endforeach
-                            </select>
-
-                            <!-- Le bouton pour soumettre -->
-                            <button type="submit" class="px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-                                OK
-                            </button>
-                        </div>
-                    </form>
-
-                </div>
+                                <!-- Le bouton pour soumettre -->
+                                <button type="submit" class="px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                                    OK
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+        @endif
 
 
                 <!-- 1. CAS : L'UTILISATEUR A DES COMPTES -->
@@ -112,31 +112,32 @@
 
                 <!-- 2. CAS : L'UTILISATEUR N'A PAS DE COMPTE -->
                 @if(Auth::user( )->comptes->isEmpty())
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-10 text-center">
-                        <h3 class="text-lg font-medium text-gray-900 mb-2">Bienvenue !</h3>
-                        <p class="text-sm text-gray-600 mb-6">Vous n'avez aucun compte pour le moment. Créez-en un pour commencer.</p>
+                    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                        <div class="p-10 text-center">
+                            <h3 class="text-lg font-medium text-gray-900 mb-2">Bienvenue !</h3>
+                            <p class="text-sm text-gray-600 mb-6">Vous n'avez aucun compte pour le moment. Créez-en un pour commencer.</p>
 
-                        <form method="POST" action="{{ route('create_account.store') }}" class="max-w-sm mx-auto">
-                            @csrf
-                            <input type="hidden" name="id_user" value="{{ Auth::id() }}">
+                            <form method="POST" action="{{ route('create_account.store') }}" class="max-w-sm mx-auto">
+                                @csrf
+                                <input type="hidden" name="id_user" value="{{ Auth::id() }}">
 
-                            <select name="type_account" class="block w-full mt-1 rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200 focus:ring-opacity-50" required>
-                                <option selected disabled>Choisissez un type de compte</option>
-                                <option value="courant">Compte courant</option>
-                                <option value="epargne">Compte épargne</option>
-                            </select>
+                                <select name="type_account" class="block w-full mt-1 rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200 focus:ring-opacity-50" required>
+                                    <option selected disabled>Choisissez un type de compte</option>
+                                    <option value="courant">Compte courant</option>
+                                    <option value="epargne">Compte épargne</option>
+                                </select>
 
-                            <button type="submit" class="mt-4 w-full inline-flex items-center justify-center px-4 py-2 bg-green-600 border border-transparent rounded-md font-semibold text-white uppercase tracking-widest hover:bg-green-700 active:bg-green-800 focus:outline-none focus:border-green-900 focus:ring ring-green-300 disabled:opacity-25 transition ease-in-out duration-150">
-                                Créer mon compte
-                            </button>
-                        </form>
+                                <button type="submit" class="mt-4 w-full inline-flex items-center justify-center px-4 py-2 bg-green-600 border border-transparent rounded-md font-semibold text-white uppercase tracking-widest hover:bg-green-700 active:bg-green-800 focus:outline-none focus:border-green-900 focus:ring ring-green-300 disabled:opacity-25 transition ease-in-out duration-150">
+                                    Créer mon compte
+                                </button>
+                            </form>
+                        </div>
                     </div>
-                </div>
                 @endif
 
 
             </div>
         </div>
     </div>
+
 </x-user-layout>

@@ -1,8 +1,8 @@
-<div>
-    <!-- Smile, breathe, and go slowly. - Thich Nhat Hanh -->
-</div>
 <x-user-layout>
-    {{-- Fond général gris clair pour la cohérence --}}
+
+
+
+@if(Auth::user()-> comptes->isEmpty())
     <div class="bg-gray-50 min-h-screen">
 
         <x-slot name="header">
@@ -66,4 +66,8 @@
             </div>
         </div>
     </div>
+    @endif
+
+
+
 </x-user-layout>

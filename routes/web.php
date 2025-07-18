@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\HandleRequest;
 use App\Http\Controllers\Compte\TransactionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Users\UserController;
@@ -22,14 +23,12 @@ Route::middleware(['auth','verified'])->group(function(){
 
                                      //Request Route
     Route::prefix('requests')->name('requests.')->group(function(){
-        Route::get('/', [AdminController::class,'requestsPending'])->name('requestsPending');
-
+        Route::get('/', [HandleRequest::class,'requestsPending'])->name('requestsPending');
         // Get the deatail on account
-        Route::get('detail/{id}', [AdminController::class,'show'])->name('detail');
-
+        Route::get('detail/{id}', [HandleRequest::class,'show'])->name('detail');
         // Route for account accepted
-        Route::post('validated/{id}', [AdminController::class,'validated'])->name('validated');
-        Route::post('rejected/{id}', [AdminController::class,'rejected'])->name('rejected');
+        Route::post('validated/{id}', [HandleRequest::class,'validated'])->name('validated');
+        Route::post('rejected/{id}', [HandleRequest::class,'rejected'])->name('rejected');
     });
 
 

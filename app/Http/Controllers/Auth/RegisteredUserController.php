@@ -55,11 +55,12 @@ class RegisteredUserController extends Controller
         $user = new User();
         $user->prenom = $request->prenom;
         $user-> nom = $request -> nom;
-        $user-> elephone = $request ->telephone;
+        $user-> telephone = $request ->telephone;
         $user-> email = $request -> email;
         $user -> identifiant = $this -> randomIdentifiant($request);
         $user -> password = Hash::make($request->password);
-//        $user -> save();
+        dd($user);
+        $user -> save();
 
 
         event(new Registered($user));

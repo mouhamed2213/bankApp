@@ -15,7 +15,8 @@ class UserController extends Controller
 
     // return to view index
     public function index(){
-        $userId = Auth::user()->id;
+        $userHasAccount = Auth::user()->comptes->isEmpty();
+        session(['userHasAccount' => $userHasAccount]);
 
         // this is sesstion is set for when the user want to change account
         // if the index is called this should be deleted
@@ -25,6 +26,8 @@ class UserController extends Controller
 
     public function switchAccount(Request $request){
         $switchAccount = $request -> input('active_account_id');
+
+
         // get the the selected account from the id
         // this id is use to the ViewService Provider
         session()->put('switchAccount_id', $switchAccount);

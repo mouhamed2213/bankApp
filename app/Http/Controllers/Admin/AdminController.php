@@ -14,45 +14,5 @@ class AdminController extends Controller
     public function index(){
         return view('admin.index');
     }
-
-
-    // Handle request
-    public function requestsPending(){
-        // get all user with account statut = en attente
-        $userAccounstRequester = CompteBancaire::with('user')->where('status', 'en attente')->get();
-            return view('admin.requests',compact('userAccounstRequester'));
-    }
-
-
-//    Show one infomation acccount
-    public function show($id){
-        $userRequestInfo = CompteBancaire::with('user')->where('id', $id)->findOrFail($id);
-            return view('compte.show', compact('userRequestInfo'));
-    }
-
-
-    // the user account is accepted
-    public function validated($id){
-
-        // update the state of the account state
-            $update = CompteBancaire::findOrFail($id);
-            $update -> status ="active";
-            $update -> save();
-            return redirect()->route('requests.requestsPending')->with('accountValidated', 'ok');
-    }
-
-    // rejected account
-    public function rejected($id){
-
-        // update the state of the account state
-            $update = CompteBancaire::findOrFail($id);
-            $update -> status ="rejected";
-//            $update -> save();
-            return redirect()->route('requests.requestsPending')
-                ->with('rejected_accoute', 'la demande d\'ouvertur de compte n a pas ete accepter');
-    }
-
-
-
 }
 

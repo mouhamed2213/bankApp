@@ -50,7 +50,7 @@
                                     </div>
                                     <div class="sm:col-span-1">
                                         <dt class="text-sm font-medium text-gray-500">Numéro de compte</dt>
-                                        <dd class="mt-1 text-sm text-gray-900 font-mono">{{ $userRequestInfo->numero_de_compte ?? 'Non assigné' }}</dd>
+                                        <dd class="mt-1 text-sm text-gray-900 font-mono">{{ $userRequestInfo->numero_compte ?? 'Non assigné' }}</dd>
                                     </div>
                                     <div class="sm:col-span-1">
                                         <dt class="text-sm font-medium text-gray-500">Statut actuel</dt>
@@ -67,6 +67,13 @@
                                         <dt class="text-sm font-medium text-gray-500">Solde initial</dt>
                                         <dd class="mt-1 text-sm text-gray-900 font-semibold">{{ number_format($userRequestInfo->solde, 0, ',', ' ') }} FCFA</dd>
                                     </div>
+
+                                    <div class="sm:col-span-1">
+                                        <dt class="text-sm font-medium text-gray-500">Type de demande </dt>
+                                        <dd class="mt-1 text-sm text-gray-900 font-mono">{{ $demande->value('type') ?? 'Non assigné' }}</dd>
+
+                                    </div>
+
                                 </dl>
                             </div>
                         </div>

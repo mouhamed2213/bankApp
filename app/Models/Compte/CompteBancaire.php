@@ -2,6 +2,7 @@
 
 namespace App\Models\Compte;
 
+use App\Models\Demande;
 use App\Models\User;
 use App\Models\VirtualCard\VirtualCard;
 use Illuminate\Database\Eloquent\Model;
@@ -23,6 +24,12 @@ class CompteBancaire extends Model
         // meaning the this account blogs to user
         return $this->belongsTo(User::class);
     }
+
+    // Queries
+    public  function demandes (){
+        return $this->hasMany(Demande::class, 'compte_id');
+    }
+
 
     // account has many source  transaction
     public function transactionSource():HasMany{

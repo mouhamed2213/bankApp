@@ -31,7 +31,7 @@ class CompteBancaireController extends Controller
     public function show(Request $request){
             // one account
         $userData = CompteBancaireService::userData( $request->id );
-        dd( $userData );
+//        dd( $userData );
         return view('compte.show-user-detail');
     }
 

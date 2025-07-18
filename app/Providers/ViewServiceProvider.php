@@ -69,12 +69,11 @@ use function Pest\Laravel\get;
         // get account information
         View::composer('compte.index', function ($view) {
             $user = Auth::user();
-            if ($user && $user->comptes->isNotEmpty()) {
 
+
+            if ($user && $user->comptes->isNotEmpty()) {
                 $activeAccount = CompteBancaire::where('user_id', $user->id)->
                     where('status', 'active')->get();
-
-//                dd($activeAccount);
                 return $view->with(compact('activeAccount'));
             }
         });
