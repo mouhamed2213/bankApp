@@ -28,7 +28,7 @@
                                     <div class="flex-shrink-0">
                                         <span class="inline-flex items-center justify-center h-12 w-12 rounded-full bg-green-100 text-green-700 font-bold text-lg">
                                             {{-- Affiche les initiales de l'utilisateur --}}
-                                            {{ strtoupper(substr($userRequestInfo->user->prenom, 0, 1) . substr($userRequestInfo->user->nom, 0, 1)) }}
+                                            {{ strtoupper(substr($userRequestInfo->user->value('prenom'), 0, 1) . substr($userRequestInfo->user->nom, 0, 1)) }}
                                         </span>
                                     </div>
                                     <div>
@@ -64,13 +64,13 @@
                                         </dd>
                                     </div>
                                     <div class="sm:col-span-1">
-                                        <dt class="text-sm font-medium text-gray-500">Solde initial</dt>
+                                        <dt class="text-sm font-medium text-gray-500">Solde</dt>
                                         <dd class="mt-1 text-sm text-gray-900 font-semibold">{{ number_format($userRequestInfo->solde, 0, ',', ' ') }} FCFA</dd>
                                     </div>
 
                                     <div class="sm:col-span-1">
                                         <dt class="text-sm font-medium text-gray-500">Type de demande </dt>
-                                        <dd class="mt-1 text-sm text-gray-900 font-mono">{{ $demande->value('type') ?? 'Non assigné' }}</dd>
+                                        <dd class="mt-1 text-sm text-gray-900 font-mono">{{  $demande['type'] ?? 'Non assigné' }}</dd>
 
                                     </div>
 
@@ -85,7 +85,7 @@
                             <h3 class="text-lg font-semibold text-gray-900 mb-4">Actions</h3>
                             <div class="space-y-4">
                                 {{-- Formulaire pour VALIDER la demande --}}
-                                <form method="POST" action="{{ route('requests.validated', ['id' => $userRequestInfo->id]) }}">
+                                <form method="POST" action="{{ route('requests.demande', ['id' => $demande->id]) }}">
                                     @csrf
                                     <button type="submit" class="w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
                                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
@@ -94,7 +94,7 @@
                                 </form>
 
                                 {{-- Formulaire pour REJETER la demande --}}
-                                <form method="POST" action="{{ route('requests.rejected', ['id' => $userRequestInfo->id] ) }}">
+                                <form method="POST" action="{{ route('requests.rejected', ['id' => $demande->id] ) }}">
                                     @csrf
                                     <button type="submit" class="w-full inline-flex justify-center py-2 px-4 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
                                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>

@@ -19,7 +19,7 @@ return new class extends Migration
             $table->enum('statut', ['en attente', 'active', 'rejete'])->default('en attente');
             $table -> text('raison_rejet')->nullable();
             $table -> date('date_demande');
-            $table -> timestamp('date_traitement');
+            $table -> timestamp('date_traitement')->nullable();
             $table->timestamps();
 
             $table->foreign('compte_id')->references('id')->on('compte_bancaire')->onDelete('cascade');

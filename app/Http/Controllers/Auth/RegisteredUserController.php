@@ -43,15 +43,6 @@ class RegisteredUserController extends Controller
         ]);
 
 
-//        $user = User::create([ // fonction to create fille data in the table User
-//            'prenom'=> $request -> prenom,
-//            'nom' => $request -> nom,
-//            'telephone' => $request ->telephone,
-//            'email' => $request -> email,
-//            'identifiant' => $this -> randomIdentifiant($request),
-//            'password' => Hash::make($request->password),
-//        ]);
-
         $user = new User();
         $user->prenom = $request->prenom;
         $user-> nom = $request -> nom;
@@ -59,7 +50,6 @@ class RegisteredUserController extends Controller
         $user-> email = $request -> email;
         $user -> identifiant = $this -> randomIdentifiant($request);
         $user -> password = Hash::make($request->password);
-        dd($user);
         $user -> save();
 
 

@@ -66,22 +66,14 @@
                                 {{-- Cellule Utilisateur améliorée avec avatar et email --}}
                                 <td class="px-6 py-4">
                                     <div class="flex items-center">
-                                        <div class="flex-shrink-0 h-10 w-10">
-                                                    <span class="inline-flex items-center justify-center h-10 w-10 rounded-full bg-green-100 text-green-700 font-bold">
-                                                        {{-- Affiche les initiales de l'utilisateur --}}
-                                                        {{ strtoupper(substr($userRequester->user->prenom, 0, 1) . substr($userRequester->user->nom, 0, 1)) }}
-                                                    </span>
-                                        </div>
                                         <div class="ml-4">
-                                            <div class="text-sm font-medium text-gray-900">{{ $userRequester->user->prenom }} {{ $userRequester->user->nom }}</div>
-                                            <div class="text-sm text-gray-500">{{ $userRequester->user->email }}</div>
+                                            <div class="text-sm font-medium text-gray-900">{{ $userRequester->comptes->numero_compte }}</div>
                                         </div>
                                     </div>
                                 </td>
                                 {{-- Cellule Type de demande --}}
                                 <td class="px-6 py-4">
-                                    <div class="text-sm text-gray-900">Ouverture de compte</div>
-                                    <div class="text-sm text-gray-500">{{ $userRequester->type_de_compte }}</div>
+                                    <div class="text-sm text-gray-500">{{ $userRequester->type }}</div>
                                 </td>
                                 {{-- Cellule Statut avec un badge coloré --}}
                                 <td class="px-6 py-4">
@@ -89,12 +81,12 @@
                                                 @if($userRequester->status == 'active') bg-green-100 text-green-800 @endif
                                                 @if($userRequester->status == 'en attente') bg-yellow-100 text-yellow-800 @endif
                                                 @if($userRequester->status == 'rejected') bg-red-100 text-red-800 @endif">
-                                                {{ $userRequester->status }}
+                                                {{ $userRequester->statut }}
                                             </span>
                                 </td>
                                 {{-- Cellule Actions avec des boutons clairs et espacés --}}
                                 <td class="px-6 py-4 text-center space-x-4">
-                                    <a href="{{ route('requests.detail', ['id' => $userRequester->id ]) }}" class="font-medium text-green-600 hover:text-green-800">Détails</a>
+                                    <a href="{{ route('requests.detail', ['id' => $userRequester-> id ]) }}" class="font-medium text-green-600 hover:text-green-800">Détails</a>
                                     <a href="#" class="font-medium text-blue-600 hover:text-blue-800">Valider</a>
                                 </td>
                             </tr>

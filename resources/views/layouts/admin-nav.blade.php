@@ -54,4 +54,14 @@
             </x-dropdown>
         </div>
     </div>
+
 </nav>
+{{-- Dans votre fichier de layout principal --}}
+
+<div class="max-w-7xl mx-auto sm:px-6 lg:px-8 py-8">
+    {{-- On place le composant de notification ici --}}
+    <x-notification />
+
+    {{-- Le reste de votre contenu --}}
+    {{ $slot }}
+</div>

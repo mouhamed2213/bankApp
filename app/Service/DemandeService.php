@@ -13,5 +13,4 @@ class DemandeService
             'date_demande' => now(),
         ]);
     }
-
 }

@@ -114,7 +114,7 @@ class TransactionController extends Controller
         }        // check if the balance is enough
 
         if( $choosedAccount  == "Choisir un compte" ){
-            return back() -> with('chooseAccount', 'Veuillez choisir un compte ');
+            return back() -> with('info', 'Veuillez choisir un compte ');
         }
 
         // Perfomr Transaction

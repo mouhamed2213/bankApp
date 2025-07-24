@@ -58,3 +58,6 @@
         </div>
     </div>
 </nav>
+{{-- Dans votre fichier de layout principal --}}
+
+

@@ -27,8 +27,9 @@ Route::middleware(['auth','verified'])->group(function(){
         // Get the deatail on account
         Route::get('detail/{id}', [HandleRequest::class,'show'])->name('detail');
         // Route for account accepted
-        Route::post('validated/{id}', [HandleRequest::class,'validated'])->name('validated');
+        Route::post('/{id}', [HandleRequest::class,'demande'])->name('demande');
         Route::post('rejected/{id}', [HandleRequest::class,'rejected'])->name('rejected');
+        Route::get('closure/{id}', [HandleRequest::class,'closure'])->name('closure'); // close account route
     });
 
 
@@ -73,7 +74,7 @@ Route::middleware(['auth', 'verified'])->group(function () { // middlewar
         // store convention  better for new creation
         Route::post('/', [CompteBancaireController::class, 'store'])->name('store');
         Route::get('createAccount', [CompteBancaireController::class, 'indexCreateAccount'])->name('create.account');
-        Route::post('storeAccount', [CompteBancaireController::class, 'storeAccount'])->name('store.account');
+        Route::post('storeAccount', [CompteBancaireController::class, 'store'])->name('store.account');
 
     });
 });
