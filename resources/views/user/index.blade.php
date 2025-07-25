@@ -14,15 +14,10 @@
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 
                 {{--  si l'utilisateur n'a pas de compte OU s'il n'a pas atteint les limites. --}}
-
-                {{-- On vérifie d'abord si les variables de comptage existent pour éviter les erreurs --}}
                 @if(isset($comptesCourantsCount) && isset($comptesEpargneCount))
-
-                {{-- On affiche le bloc de création si l'utilisateur peut encore créer au moins un type de compte --}}
                 @if($comptesCourantsCount < 2 || $comptesEpargneCount < 1)
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-8"> {{-- J'ai ajouté un margin-bottom --}}
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-8">
                     <div class="p-10 text-center">
-                        {{-- Le message s'adapte si l'utilisateur n'a aucun compte --}}
                         @if(Auth::user()->comptes->isEmpty())
                         <h3 class="text-lg font-medium text-gray-900 mb-2">Bienvenue !</h3>
                         <p class="text-sm text-gray-600 mb-6">Pour commencer, veuillez créer un compte bancaire.</p>
@@ -33,23 +28,15 @@
 
                         <form method="POST" action="{{ route('create_account.store') }}" class="max-w-sm mx-auto">
                             @csrf
-                            {{-- L'input hidden id_user n'est plus nécessaire, le contrôleur utilise Auth::user() --}}
-
                             <select name="type_account" class="block w-full mt-1 rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring focus:ring-green-200 focus:ring-opacity-50" required>
                                 <option value="" selected disabled>Choisissez un type de compte</option>
-
-                                {{-- On n'affiche l'option "Compte courant" que si l'utilisateur en a moins de 2 --}}
                                 @if ($comptesCourantsCount < 2)
                                 <option value="courant">Compte courant</option>
                                 @endif
-
-                                {{-- On n'affiche l'option "Compte épargne" que si l'utilisateur n'en a pas encore --}}
                                 @if ($comptesEpargneCount < 1)
                                 <option value="epargne">Compte épargne</option>
                                 @endif
                             </select>
-
-                            {{-- Bouton stylisé avec la couleur verte principale --}}
                             <button type="submit" class="mt-4 w-full inline-flex items-center justify-center px-4 py-2 bg-green-600 border border-transparent rounded-md font-semibold text-white uppercase tracking-widest hover:bg-green-700 active:bg-green-800 focus:outline-none focus:border-green-900 focus:ring ring-green-300 disabled:opacity-25 transition ease-in-out duration-150">
                                 Créer mon compte
                             </button>
@@ -58,11 +45,9 @@
                 </div>
                 @endif
                 @endif
-                {{-- ***** FIN DE LA MODIFICATION ***** --}}
 
 
                 <!-- 2. CAS : LE COMPTE EST ACTIF -->
-                {{-- Cette condition reste la même, elle affiche le tableau de bord si au moins un compte est actif --}}
                 @if(Auth::user()->comptes->where('status', 'active')->isNotEmpty())
                 <!-- Carte de Solde -->
                 <div class="bg-gradient-to-r from-green-700 to-emerald-700 text-white rounded-xl shadow-lg p-8 mb-8 ">
@@ -71,7 +56,6 @@
                             <p class="text-sm uppercase tracking-wider opacity-80">Solde Actuel</p>
                             <p class="text-4xl font-bold mt-1">{{ $solde_user }}  <span class="text-2xl font-black">FCFA</span></p>
                             <p class="text-sm lowercase tracking-wider opacity-80"> Compte en cour d'utilisation {{ $numero_compte }} </p>
-
                         </div>
                         <div class="text-right ">
                             <p class="text-sm uppercase tracking-wider opacity-80">Type de compte</p>
@@ -80,18 +64,25 @@
                     </div>
                 </div>
 
-                <!-- Cartes d'Actions -->
+                <!-- Cartes -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                    {{-- J'ai unifié le style des cartes et ajouté des icônes SVG pour un look plus pro --}}
+                    {{-- ***** DÉBUT DE LA MODIFICATION ***** --}}
+
+                    {{-- Le DÉPÔT est toujours disponible, quel que soit le type de compte --}}
+                    <a href="{{ route('transaction.index') }}" class="action-card bg-white hover:bg-gray-50">
+                        <div class="p-2 bg-green-100 rounded-full"><svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg></div>
+                        <h3 class="font-bold text-gray-800">Dépôt</h3>
+                    </a>
+
+                    {{-- Le RETRAIT est toujours disponible (la logique de limitation est dans le contrôleur ) --}}
                     <a href="{{ route('transaction.withdraw.create') }}" class="action-card bg-white hover:bg-gray-50">
                         <div class="p-2 bg-red-100 rounded-full"><svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 12H6"></path></svg></div>
                         <h3 class="font-bold text-gray-800">Retrait</h3>
                     </a>
-                    <a href="{{ route('transaction.index'  ) }}" class="action-card bg-white hover:bg-gray-50">
-                        <div class="p-2 bg-green-100 rounded-full"><svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg></div>
-                        <h3 class="font-bold text-gray-800">Dépôt</h3>
-                    </a>
-                    <a href="{{ route('transaction.transfer.create'  ) }}" class="action-card bg-white hover:bg-gray-50">
+
+                    {{-- Le VIREMENT et le PAIEMENT ne sont disponibles QUE pour le compte courant --}}
+                    @if ($type_compte == 'courant' )
+                    <a href="{{ route('transaction.transfer.create') }}" class="action-card bg-white hover:bg-gray-50">
                         <div class="p-2 bg-blue-100 rounded-full"><svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg></div>
                         <h3 class="font-bold text-gray-800">Virement</h3>
                     </a>
@@ -99,6 +90,17 @@
                         <div class="p-2 bg-yellow-100 rounded-full"><svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg></div>
                         <h3 class="font-bold text-gray-800">Paiement</h3>
                     </div>
+                    @else
+                    {{-- Pour le compte épargne, on affiche des cartes désactivées pour que le design ne casse pas --}}
+                    <div class="action-card bg-gray-200 cursor-not-allowed opacity-50">
+                        <div class="p-2 bg-gray-300 rounded-full"><svg class="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg></div>
+                        <h3 class="font-bold text-gray-800">Virement</h3>
+                    </div>
+                    <div class="action-card bg-gray-200 cursor-not-allowed opacity-50">
+                        <div class="p-2 bg-gray-300 rounded-full"><svg class="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg></div>
+                        <h3 class="font-bold text-gray-800">Paiement</h3>
+                    </div>
+                    @endif
                 </div>
 
                 <!-- Historique des transactions -->
@@ -109,33 +111,57 @@
                     </div>
 
                     <ul class="divide-y divide-gray-200">
-                        @foreach($history as $historyTrans )
 
-                        <li class="py-3 flex justify-between items-center">
-                            <div>
-                                <p class="text-sm font-medium text-gray-800">{{ $historyTrans->type_transaction }} </p>
-                                <p class="text-sm text-gray-500">{{ $historyTrans ->created_at }}</p>
+                        @forelse($history as $transaction)
+                        <li class="py-4 flex justify-between items-center">
+                            <div class="flex items-center">
+
+                                @if($transaction->type_transaction == 'depot')
+                                <div class="p-2 bg-green-100 rounded-full mr-4">
+                                    <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+                                </div>
+                                @elseif($transaction->type_transaction == 'retrait')
+                                <div class="p-2 bg-red-100 rounded-full mr-4">
+                                    <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 12H6"></path></svg>
+                                </div>
+                                @elseif($transaction->type_transaction == 'virement')
+                                <div class="p-2 bg-blue-100 rounded-full mr-4">
+                                    <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
+                                </div>
+                                @elseif($transaction->type_transaction == 'interet')
+                                <div class="p-2 bg-yellow-100 rounded-full mr-4">
+                                    <svg class="w-5 h-5 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7.014A8.003 8.003 0 0112 3a8.003 8.003 0 016.014 2.986C20.5 8 21 11 21 13c-2 1-2.657 1.657-3.343 2.343z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m-6.364-2.364l.707-.707M6.343 7.343l-.707-.707m12.728 0l.707.707M17.657 18.657l-.707.707M4 12H3m18 0h-1"></path></svg>
+                                </div>
+                                @endif
+
+                                <div>
+                                    {{-- On met la première lettre en majuscule pour un affichage plus propre --}}
+                                    <p class="text-sm font-medium text-gray-800">{{ ucfirst($transaction->type_transaction) }}</p>
+                                    <p class="text-sm text-gray-500">{{ $transaction->created_at->format('d/m/Y H:i') }}</p>
+                                </div>
                             </div>
-                            <span class="text-sm font-semibold text-gray-600"> {{ $historyTrans->montant }} FCFA</span>
-                        </li>
-                        @endforeach
 
-
-                        <li class="py-3 flex justify-between items-center">
-                            <div>
-                                <p class="text-sm font-medium text-gray-800">Paiement Facture SNE</p>
-                                <p class="text-sm text-gray-500">06/07/2025 18:45</p>
-                            </div>
-                            <span class="text-sm font-semibold text-red-600">- 15 000 FCFA</span>
+                            @if($transaction->type_transaction == 'depot' || $transaction->type_transaction == 'interet')
+                            {{-- En vert pour les entrées d'argent --}}
+                            <span class="text-sm font-semibold text-green-600">+ {{ number_format($transaction->montant, 0, ',', ' ') }} FCFA</span>
+                            @else
+                            {{-- En rouge pour les sorties d'argent (retrait, virement) --}}
+                            <span class="text-sm font-semibold text-red-600">- {{ number_format($transaction->montant, 0, ',', ' ') }} FCFA</span>
+                            @endif
                         </li>
+                        @empty
+                        <li class="py-4 text-center text-sm text-gray-500">
+                            Aucune transaction à afficher pour le moment.
+                        </li>
+                        @endforelse
                     </ul>
+
+
                 </div>
                 @endif
 
                 <div>
-
                     <!-- 3. CAS : LE COMPTE EST EN ATTENTE -->
-                    {{-- J'ai amélioré cette condition pour qu'elle ne s'affiche que si aucun compte n'est actif --}}
                     @if (Auth::user()->comptes->where('status', 'active')->isEmpty() && Auth::user()->comptes->where('status', 'en attente')->isNotEmpty())
                     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                         <div class="p-10 text-center">
@@ -149,8 +175,7 @@
                     @endif
 
                     <!-- 4. CAS : LE COMPTE EST REJETÉ -->
-                    {{-- J'ai amélioré cette condition pour qu'elle ne s'affiche que si aucun compte n'est actif ou en attente --}}
-                    @if(Auth::user( )->comptes->where('status', 'active')->isEmpty() && Auth::user()->comptes->where('status', 'en attente')->isEmpty() && Auth::user()->comptes->where('status', 'rejected')->isNotEmpty())
+                    @if(Auth::user(  )->comptes->where('status', 'active')->isEmpty() && Auth::user()->comptes->where('status', 'en attente')->isEmpty() && Auth::user()->comptes->where('status', 'rejected')->isNotEmpty())
                     <div class="bg-red-50 border-l-4 border-red-400 p-6 rounded-r-lg">
                         <div class="flex">
                             <div class="flex-shrink-0">
@@ -167,10 +192,7 @@
                         </div>
                     </div>
                     @endif
-
                 </div>
-
-
 
                 <!-- (Toasts) -->
                 @php
@@ -189,8 +211,6 @@
                     <div class="p-4">
                         <div class="flex items-start">
                             <div class="flex-shrink-0">
-
-                                {{-- Icône verte pour le succès --}}
                                 <svg class="h-6 w-6 text-green-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
@@ -227,5 +247,5 @@
                     transform: translateY(-4px);
                     box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
                 }
-
-                </x-user-layout>
+            </style>
+</x-user-layout>

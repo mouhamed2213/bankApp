@@ -16,7 +16,6 @@
         <div class="py-12">
             <div class="max-w-2xl mx-auto sm:px-6 lg:px-8">
 
-                {{-- La carte principale pour le formulaire de retrait --}}
                 <div class="bg-white shadow-lg rounded-xl overflow-hidden">
                     <form method="POST" action="{{ route('transaction.withdraw.store') }}">
                         @csrf
@@ -31,7 +30,7 @@
                                     <label for="choosedAccount" class="block text-sm font-medium text-gray-700">Depuis quel compte retirer ?</label>
                                     <select id="choosedAccount" name="choosedAccount" required class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm">
                                         <option value="" disabled selected>Sélectionnez le compte à débiter</option>
-                                        @foreach($userAccount as $account)
+                                        @foreach($userAccounts as $account)
                                         @if(!in_array($account->status, ['en attente', 'rejected']))
                                         <option value="{{ $account->numero_compte }}">
                                             Compte {{ ucfirst($account->type_de_compte) }} ({{ $account->numero_compte }}) - Solde : {{ number_format($account->solde, 0, ',', ' ') }} FCFA

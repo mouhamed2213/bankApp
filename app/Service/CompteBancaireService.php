@@ -56,6 +56,7 @@
 
 namespace App\Service;
 
+use App\Events\AccountStatusChanged;
 use App\Models\Compte\CompteBancaire;
 use App\Models\Demande;
 use Illuminate\Support\Facades\Auth;
@@ -70,16 +71,6 @@ class CompteBancaireService
     {
         return Auth::user()->comptes;
     }
-
-
-    public static function userData($compteId): ?CompteBancaire // On retourne un seul modèle ou null
-    {
-        // On cherche le compte par son ID ET on s'assure qu'il appartient à l'utilisateur connecté.
-        return CompteBancaire::where('id', $compteId)
-            ->where('user_id', Auth::id())
-            ->first(); // first() retourne un seul objet ou null, c'est ce qu'on veut.
-    }
-
 
     // createa account
     public function createBankAccount(int $userId, string $typeDeCompte): bool
@@ -111,10 +102,6 @@ class CompteBancaireService
         return false;
     }
 
-    /**
-     * Méthode privée pour générer un numéro de compte unique.
-     * C'est une bonne pratique de séparer la logique de génération.
-     */
     private function generateNumeroCompte(): string
     {
         // Votre logique de génération existante.

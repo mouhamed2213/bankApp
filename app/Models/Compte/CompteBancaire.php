@@ -48,7 +48,10 @@ class CompteBancaire extends Model
         return $this->hasMany(VirtualCard::class, 'compte_id');
     }
 
-
+    protected $casts = [
+        // On ajoute cette ligne pour dire à Laravel que cette colonne est une date/heure
+        'date_dernier_reset_retrait' => 'datetime',
+    ];
 
 
 }
