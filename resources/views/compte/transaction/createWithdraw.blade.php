@@ -28,11 +28,11 @@
                                 <!-- Sélection du compte à débiter -->
                                 <div>
                                     <label for="choosedAccount" class="block text-sm font-medium text-gray-700">Depuis quel compte retirer ?</label>
-                                    <select id="choosedAccount" name="choosedAccount" required class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm">
+                                    <select id="choosedAccount" name="compte_id" required class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm">
                                         <option value="" disabled selected>Sélectionnez le compte à débiter</option>
                                         @foreach($userAccounts as $account)
                                         @if(!in_array($account->status, ['en attente', 'rejected']))
-                                        <option value="{{ $account->numero_compte }}">
+                                        <option value="{{ $account->id }}">
                                             Compte {{ ucfirst($account->type_de_compte) }} ({{ $account->numero_compte }}) - Solde : {{ number_format($account->solde, 0, ',', ' ') }} FCFA
                                         </option>
                                         @endif
@@ -55,7 +55,7 @@
                                             <span class="text-gray-500 sm:text-sm">FCFA</span>
                                         </div>
                                     </div>
-                                    {{-- Affichage des erreurs liées au montant --}}
+
                                     @if(session('erroreAmount'))
                                     <p class="mt-2 text-sm text-red-600">{{ session('erroreAmount') }}</p>
                                     @endif
@@ -67,7 +67,6 @@
                             </div>
                         </div>
 
-                        <!-- Pied de la carte avec le bouton de soumission -->
                         <div class="px-6 py-4 bg-gray-50 text-right">
                             <button type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
                                 Confirmer le retrait

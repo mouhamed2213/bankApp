@@ -29,10 +29,10 @@
                                 <!-- Sélection du compte à débiter -->
                                 <div>
                                     <label for="choosedAccount" class="block text-sm font-medium text-gray-700">Depuis quel compte ?</label>
-                                    <select id="choosedAccount" name="choosedAccount" required class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm">
+                                    <select id="choosedAccount" name="choosedAccount" required class="mt-1 block w-full py-2 px-3 border    border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm">
                                         <option value="" disabled selected>Sélectionnez le compte à débiter</option>
                                         @foreach($userAccount as $account)
-                                        @if(!in_array($account->status, ['en attente', 'rejected']))
+                                        @if(!in_array($account->status, ['en attente', 'rejected']) && $account->type_de_compte == 'courant')
                                         <option value="{{ $account->numero_compte }}">
                                             Compte {{ ucfirst($account->type_de_compte) }} ({{ $account->numero_compte }}) - Solde : {{ number_format($account->solde, 0, ',', ' ') }} FCFA
                                         </option>

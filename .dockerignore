@@ -1,0 +1,7 @@
+.docker
+.env
+.git
+.github
+.idea
+node_modules
+vendor

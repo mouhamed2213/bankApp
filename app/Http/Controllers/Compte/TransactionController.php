@@ -90,7 +90,7 @@ class TransactionController extends Controller
 
     public function createWithdraw()
     {
-        // On récupère uniquement les comptes actifs de l'utilisateur connecté
+        // les comptes actifs
         $userAccounts = Auth::user()->comptes()->where('status', 'active')->get();
 
         // On passe ces comptes à la vue
@@ -105,15 +105,13 @@ class TransactionController extends Controller
         // 1. VALIDATION
         $validated = $request->validate([
             'compte_id' => 'required|integer|exists:compte_bancaire,id',
-            'montant' => 'required|numeric|min:1000',
         ], [
             'compte_id.required' => 'Veuillez choisir un compte.',
-            'montant.min' => 'Le montant minimum pour un retrait est de 1000 FCFA.',
+            'withdraw.min' => 'Le montant minimum pour un retrait est de 1000 FCFA.',
         ]);
 
         $compteId = $validated['compte_id'];
-        $montant = $validated['montant'];
-
+        $montant =(int) $request-> input('withdraw');
 
         $compte = CompteBancaire::where('id', $compteId)
             ->where('user_id', Auth::id())
@@ -123,7 +121,6 @@ class TransactionController extends Controller
         if ($compte->status !== 'active') {
             return back()->with('error', 'Les retraits ne sont pas autorisés sur ce compte car il n\'est pas actif.');
         }
-
         if ($compte->solde < $montant) {
             return back()->with('error', 'Votre solde est insuffisant pour effectuer ce retrait.');
         }
@@ -141,22 +138,24 @@ class TransactionController extends Controller
 
         try {
             DB::transaction(function () use ($compte, $montant) {
-                $compte->solde -= $montant;
+
+                $compte->solde = $compte->solde - $montant;
 
                 if ($compte->type_de_compte === 'epargne') {
-                    $compte->retraits_mensuels++;
+                    $compte->retraits_mensuels = $compte->retraits_mensuels + 1 ;
                 }
-
                 $compte->save();
 
-                Transaction::create([
-                    'compte_source_id' => $compte->id,
-                    'type_transaction' => 'retrait',
-                    'montant' => $montant,
-                    'date' => now(),
-                ]);
+                $transAction = new  Transaction();
+
+                $transAction -> compte_source_id = $compte->id;
+                $transAction -> type_transaction = 'retrait';
+                $transAction -> montant = $montant;
+                $transAction -> save();
+
             });
         } catch (\Exception $e) {
+            dd($e->getMessage());
             return back()->with('error', 'Une erreur technique est survenue. Veuillez réessayer.');
         }
 
@@ -166,76 +165,10 @@ class TransactionController extends Controller
     }
 
 
-
-
-
-
-
-
-    // handle withdraw
-//    public function createWithdraw(){
-//        $userAccount  = Auth::user()->comptes;
-//        return view('compte.transaction.createWithdraw', compact('userAccount'));
-//    }
-
-
-
-//    // handle withdraw
-//    public function storeWithdraw(Request $request){
-//
-//        $choosedAccount = $request -> input('choosedAccount');
-//        $userAcccount =  CompteBancaire::where('numero_compte', $choosedAccount);
-//        $currentSolde =  CompteBancaire::where('numero_compte', $choosedAccount)->value('solde'); // get the user account balance
-//
-//        $amountWithdraw = $request->input('withdraw'); // amount to retrieve
-//        $type = 'withdraw';
-//
-//        // check the min allowed to retrieve
-//        if( $amountWithdraw < 1000 ){
-//            return back() -> with('erroreAmount', 'Minimum montant autriser : 5000');
-//        }
-//
-//        // check if the balance is enough
-//        if( $amountWithdraw > $currentSolde ){
-//            return back() -> with('balanceNotEnought', 'Solde inssufisant');
-//        }        // check if the balance is enough
-//
-//        if( $choosedAccount  == "Choisir un compte" ){
-//            return back() -> with('info', 'Veuillez choisir un compte ');
-//        }
-//
-//        // Perfomr Transaction
-//        $newSolde = $currentSolde - $amountWithdraw;
-//        $transaction = new Transaction();
-//        $transaction -> type_transaction = $type;
-//        $transaction -> montant = $amountWithdraw;
-//        $transaction -> compte_source_id = CompteBancaire::where('numero_compte',$choosedAccount)->value('id');
-//
-////        $userAcccount = $userAcccount
-//
-//        if($userAcccount){
-//            $userAcccount ->update ([
-//                'solde' => $newSolde
-//            ]) ;
-//        }
-//
-//        $transaction -> save();
-//
-//        return redirect()->route('user.index')
-//            ->with("withdrawPassed", "Vous avez retirer".
-//                $amountWithdraw . ' Fcfa.'.
-//                ' Dans votre compte : '.$choosedAccount.
-//                '. Solde : '.$newSolde);
-//    }
-
-
     public function getUser(){
         return Auth::user();
     }
 
-//    public function getAccount($choosedAccount){
-//        return  CompteBancaire::where('numero_compte',$choosedAccount);
-//    }
 
 
     public function getUserId(){
