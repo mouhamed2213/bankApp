@@ -14,6 +14,7 @@
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 
                 {{--  si l'utilisateur n'a pas de compte OU s'il n'a pas atteint les limites. --}}
+
                 @if(isset($comptesCourantsCount) && isset($comptesEpargneCount))
                 @if($comptesCourantsCount < 2 || $comptesEpargneCount < 1)
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-8">
@@ -91,6 +92,7 @@
                         <h3 class="font-bold text-gray-800">Paiement</h3>
                     </div>
                     @else
+
                     {{-- Pour le compte épargne, on affiche des cartes désactivées pour que le design ne casse pas --}}
                     <div class="action-card bg-gray-200 cursor-not-allowed opacity-50">
                         <div class="p-2 bg-gray-300 rounded-full"><svg class="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg></div>

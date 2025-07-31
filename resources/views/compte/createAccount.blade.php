@@ -35,11 +35,11 @@
                         <input type="hidden" name="id_user" value="{{ Auth::id() }}">
 
                         <div>
-                            <label for="type_account" class="block text-sm font-medium text-gray-700 mb-2">Type de compte</label>
+                            <label for="type_account" class="block text-sm font-medium text-gray-700 mb-2" >Type de compte</label>
                             <select id="type_account" name="type_account" class="block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm" required>
-                                <option value="" selected disabled>Sélectionnez une option...</option>
-                                <option value="courant">Compte Courant</option>
-                                <option value="epargne">Compte Épargne</option>
+<!--                                <option class=" text-gray-700"  value="" selected disabled>Sélectionnez une option...</option>-->
+                                <option class=" text-gray-700" value="courant">Compte Courant</option>
+                                <option class=" text-gray-700" value="epargne">Compte Épargne</option>
                             </select>
                         </div>
 
